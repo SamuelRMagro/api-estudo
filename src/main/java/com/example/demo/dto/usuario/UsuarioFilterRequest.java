@@ -20,7 +20,7 @@ public record UsuarioFilterRequest(
         @DataDentroIntervalo
         LocalDate dataCadastroInicio,
 
-        @Schema(description = "Data de cadastro até YYYY-MM-DD", defaultValue = "2026-08-05", example = "202-06-01")
+        @Schema(description = "Data de cadastro até YYYY-MM-DD", defaultValue = "2026-08-05", example = "2022-06-01")
         @DataDentroIntervalo
         LocalDate dataCadastroFim
 ) {

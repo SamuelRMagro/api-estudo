@@ -1,5 +1,6 @@
 package com.example.demo.dto.professor;
 
+import com.example.demo.customValidations.anotacoesCustomizadas.DataDentroIntervalo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
@@ -19,9 +20,11 @@ public record ProfessorFilterRequest(
         Boolean isAtivo,
 
         @Schema(description = "Data de admissao a partir de YYYY-MM-DD", defaultValue = "2018-02-05", example = "2019-08-12")
+        @DataDentroIntervalo
         LocalDate dataAdmissaoInicio,
 
         @Schema(description = "Data de admissao até YYYY-MM-DD", defaultValue = "2023-08-07", example = "2021-02-15")
+        @DataDentroIntervalo
         LocalDate dataAdmissaoFim
 ) {
 }

@@ -4,8 +4,7 @@ import com.example.demo.dto.exception.ErroCampo;
 
 import java.util.List;
 
-public class CadastroInvalidoCustomException extends RuntimeException
-{
+public class CadastroInvalidoCustomException extends RuntimeException {
     private List<ErroCampo> erros;
 
     public CadastroInvalidoCustomException(List<ErroCampo> erros) {

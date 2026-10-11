@@ -38,6 +38,8 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String login;
 
+    private String senha;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -56,7 +58,7 @@ public class Usuario {
     @Column(name = "data_inativacao", columnDefinition = "TIMESTAMP DEFAULT NULL")
     private LocalDateTime dataInativacao = null;
 
-    public Usuario(Boolean isAtivo, String email, String login, Integer idade, String cpf, String nome) {
+    public Usuario(Boolean isAtivo, String email, String login, Integer idade, String cpf, String nome, String senha) {
         this.isAtivo = isAtivo;
         this.email = email;
         this.login = login;
@@ -64,6 +66,7 @@ public class Usuario {
         this.cpf = cpf;
         this.nome = nome;
         this.isAtivo = true;
+        this.senha = senha;
     }
 
     public static String cpfMascarado(String cpf) {
