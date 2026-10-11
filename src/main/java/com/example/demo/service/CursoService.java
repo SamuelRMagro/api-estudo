@@ -1,4 +1,4 @@
-package com.example.demo.service.curso;
+package com.example.demo.service;
 
 import com.example.demo.dto.curso.CursoCreateDTO;
 import com.example.demo.dto.curso.CursoFilterRequest;
@@ -7,8 +7,8 @@ import com.example.demo.dto.curso.CursoUpdateDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.CursoMapper;
 import com.example.demo.model.Curso;
-import com.example.demo.repository.curso.CursoRepository;
-import com.example.demo.specifictions.curso.CursoSpecification;
+import com.example.demo.repository.CursoRepository;
+import com.example.demo.specifictions.CursoSpecification;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +75,7 @@ public class CursoService {
     public void inativar(Long id) {
         Curso curso = buscarOuFalharEntity(id);
 
-        if (curso.isInativo()) {
+        if (curso.isAtivo()) {
             curso.setIsAtivo(false);
             curso.setDataAtualizacao(LocalDateTime.now());
             cursoRepository.save(curso);

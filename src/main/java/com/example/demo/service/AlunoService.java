@@ -1,11 +1,11 @@
-package com.example.demo.service.aluno;
+package com.example.demo.service;
 
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
 import com.example.demo.mappers.AlunoMapper;
 import com.example.demo.model.Aluno;
-import com.example.demo.repository.aluno.AlunoRepository;
-import com.example.demo.specifictions.aluno.AlunoSpecification;
+import com.example.demo.repository.AlunoRepository;
+import com.example.demo.specifictions.AlunoSpecification;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

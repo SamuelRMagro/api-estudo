@@ -1,4 +1,4 @@
-package com.example.demo.service.professor;
+package com.example.demo.service;
 
 import com.example.demo.dto.professor.*;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
@@ -7,10 +7,9 @@ import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.ProfessorMapper;
 import com.example.demo.model.Professor;
 import com.example.demo.model.Usuario;
-import com.example.demo.repository.professor.ProfessorRepository;
-import com.example.demo.repository.titulacao.TitulacaoRepository;
-import com.example.demo.service.usuario.UsuarioService;
-import com.example.demo.specifictions.professor.ProfessorSpecification;
+import com.example.demo.repository.ProfessorRepository;
+import com.example.demo.repository.TitulacaoRepository;
+import com.example.demo.specifictions.ProfessorSpecification;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +23,12 @@ import java.util.List;
 public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
-    private final ProfessorMapper mapper;
     private final TitulacaoRepository titulacaoRepository;
     private final UsuarioService usuarioService;
     private final ProfessorMapper professorMapper;
 
-    public ProfessorService(ProfessorRepository professorRepository, ProfessorMapper mapper, TitulacaoRepository titulacaoRepository, UsuarioService usuarioService, ProfessorMapper professorMapper) {
+    public ProfessorService(ProfessorRepository professorRepository, TitulacaoRepository titulacaoRepository, UsuarioService usuarioService, ProfessorMapper professorMapper) {
         this.professorRepository = professorRepository;
-        this.mapper = mapper;
         this.titulacaoRepository = titulacaoRepository;
         this.usuarioService = usuarioService;
         this.professorMapper = professorMapper;
@@ -48,14 +45,14 @@ public class ProfessorService {
                 .and(ProfessorSpecification.inicioAdmissaoAntesDe(request.dataAdmissaoFim()));
         Page<Professor> professorPage = professorRepository.findAll(spec, pageable);
 
-        return professorPage.map(mapper::fromEntityToDTO);
+        return professorPage.map(professorMapper::fromEntityToDTO);
     }
 
     public ProfessorIdResponseDTO buscarOuFalhar(Long id) {
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
         List<TitulacaoResponseDTO> titulacoes = titulacaoRepository.buscaTitulacoesProfessorId(id);
-        return mapper.fromEntityToTitulacoes(professor, titulacoes);
+        return professorMapper.fromEntityToTitulacoes(professor, titulacoes);
     }
 
     @Transactional
@@ -72,7 +69,7 @@ public class ProfessorService {
     }
 
     @Transactional
-    public ProfessorResponseDTO02 atualizarProfessor(@Valid ProfessorUpdateDTO updateDTO, Long id) {
+    public ProfessorResponseDTO atualizarProfessor(@Valid ProfessorUpdateDTO updateDTO, Long id) {
         Professor professor = buscarUsuarioAtivoOuFalhar(id);
 
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(updateDTO.usuario(), professor.getUsuario().getId());
@@ -80,11 +77,11 @@ public class ProfessorService {
 
         professor.setUsuario(usuarioService.buscarPorId(professor.getUsuario().getId()));
         professorRepository.save(professor);
-        return professorMapper.fromEntityToDTO02(professor);
+        return professorMapper.fromEntityToDTO(professor);
     }
 
     private Professor buscarUsuarioAtivoOuFalhar(Long id) {
        return professorRepository.findByIdAndUsuario_IsAtivo(id, true)
-               .orElseThrow(() -> new RegistroNaoEncontradoCustomException("Usuario de id: %d não encontrado!"));
+               .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Usuario de id: %d não encontrado.", id)));
     }
 }

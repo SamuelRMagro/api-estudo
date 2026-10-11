@@ -1,4 +1,4 @@
-package com.example.demo.service.usuario;
+package com.example.demo.service;
 
 import com.example.demo.dto.exception.ErroCampo;
 import com.example.demo.dto.usuario.UsuarioCreateDTO;
@@ -9,8 +9,8 @@ import com.example.demo.exceptions.custom.CadastroInvalidoCustomException;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.UsuarioMapper;
 import com.example.demo.model.Usuario;
-import com.example.demo.repository.usuario.UsuarioRepository;
-import com.example.demo.specifictions.usuario.UsuarioSpecification;
+import com.example.demo.repository.UsuarioRepository;
+import com.example.demo.specifictions.UsuarioSpecification;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,7 +87,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO cadastrarUsuario(UsuarioCreateDTO dto) {
-         Usuario usuario = new Usuario(dto.isAtivo(), dto.email(), dto.login(), dto.idade(), limpaCpf(dto.cpf()), dto.nome());
+         Usuario usuario = new Usuario(dto.isAtivo(), dto.email(), dto.login(), dto.idade(), limpaCpf(dto.cpf()), dto.nome(), dto.senha());
 
          List<ErroCampo> erros = new ArrayList<>();
 
@@ -126,10 +126,10 @@ public class UsuarioService {
             } else {
                 user.setEmail(updateDTO.email());
             }
-            if (usuarioRepository.existsByCpfAndIdNot(updateDTO.cpf(), id)){
+            if (usuarioRepository.existsByCpfAndIdNot(limpaCpf(updateDTO.cpf()), id)){
                 erros.add(new ErroCampo("cpf", "CPF já cadastrado."));
             } else {
-                user.setCpf(updateDTO.cpf());
+                user.setCpf(limpaCpf(updateDTO.cpf()));
             }
 
             if (!erros.isEmpty()){
