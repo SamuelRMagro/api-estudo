@@ -1,4 +1,4 @@
-package com.example.demo.specifictions.professor;
+package com.example.demo.specifictions;
 
 import com.example.demo.model.Professor;
 import com.example.demo.model.Usuario;

@@ -3,7 +3,6 @@ package com.example.demo.mappers;
 import com.example.demo.dto.professor.ProfessorCreateDTO;
 import com.example.demo.dto.professor.ProfessorIdResponseDTO;
 import com.example.demo.dto.professor.ProfessorResponseDTO;
-import com.example.demo.dto.professor.ProfessorResponseDTO02;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
 import com.example.demo.model.Professor;
 import com.example.demo.model.Usuario;
@@ -15,14 +14,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProfessorMapper {
-    @Mapping(target = "usuarioId", source = "entity.usuario.id")
-    @Mapping(target = "nome", source = "entity.usuario.nome")
-    @Mapping(target = "email", source = "entity.usuario.email")
-    @Mapping(target = "cpf", source = "entity.usuario.cpf")
-    @Mapping(target = "dataCriacao", source = "entity.usuario.dataCadastro")
-    @Mapping(target = "dataAtualizacao", source = "entity.usuario.dataAtualizacao")
-    @Mapping(target = "ativo", source = "entity.usuario.isAtivo")
-    ProfessorResponseDTO fromEntityToDTO(Professor entity);
 
     @Mapping(target = "usuarioId", source = "entity.usuario.id")
     @Mapping(target = "nome", source = "entity.usuario.nome")
@@ -45,7 +36,7 @@ public interface ProfessorMapper {
     @Mapping(target = "usuario.isAtivo", source = "entity.usuario.isAtivo")
     @Mapping(target = "usuario.cpf", expression = "java(cpfMascarado(usuario))")
     @Mapping(target = "usuario", source = "entity.usuario")
-    ProfessorResponseDTO02 fromEntityToDTO02(Professor entity);
+    ProfessorResponseDTO fromEntityToDTO(Professor entity);
 
     default String cpfMascarado(Usuario entity) {
         return Usuario.cpfMascarado(entity.getCpf());

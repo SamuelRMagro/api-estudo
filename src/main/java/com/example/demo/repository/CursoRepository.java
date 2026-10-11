@@ -1,4 +1,4 @@
-package com.example.demo.repository.curso;
+package com.example.demo.repository;
 
 import com.example.demo.model.Curso;
 import org.springframework.data.domain.Page;
