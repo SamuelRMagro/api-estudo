@@ -4,7 +4,7 @@ import com.example.demo.dto.curso.CursoCreateDTO;
 import com.example.demo.dto.curso.CursoFilterRequest;
 import com.example.demo.dto.curso.CursoResponseDTO;
 import com.example.demo.dto.curso.CursoUpdateDTO;
-import com.example.demo.service.curso.CursoService;
+import com.example.demo.service.CursoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

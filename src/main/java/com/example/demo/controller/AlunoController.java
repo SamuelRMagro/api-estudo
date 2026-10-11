@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
-import com.example.demo.service.aluno.AlunoService;
+import com.example.demo.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

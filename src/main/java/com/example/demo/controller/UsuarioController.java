@@ -4,7 +4,7 @@ import com.example.demo.dto.usuario.UsuarioCreateDTO;
 import com.example.demo.dto.usuario.UsuarioFilterRequest;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
 import com.example.demo.dto.usuario.UsuarioUpdateDTO;
-import com.example.demo.service.usuario.UsuarioService;
+import com.example.demo.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,8 +29,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Recurso de usuarios", description = "Endpoints para o gerenciamento do recurso usuarios")
 public class UsuarioController {
 
-    @Autowired
-    UsuarioService service;
+    private final UsuarioService service;
+
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
+    }
 
     @Operation(
             summary = "Consulta de usuarios",

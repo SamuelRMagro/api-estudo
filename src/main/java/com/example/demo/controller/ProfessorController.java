@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.professor.*;
-import com.example.demo.service.professor.ProfessorService;
+import com.example.demo.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -97,13 +97,13 @@ public class ProfessorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProfessorResponseDTO02.class))),
+                            schema = @Schema(implementation = ProfessorResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
             @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorResponseDTO02> atualizar(
+    public ResponseEntity<ProfessorResponseDTO> atualizar(
             @Valid @RequestBody ProfessorUpdateDTO updateDTO, @PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.atualizarProfessor(updateDTO, id));
     }
