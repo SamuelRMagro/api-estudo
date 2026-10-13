@@ -82,6 +82,13 @@ public class ProfessorService {
 
     private Professor buscarUsuarioAtivoOuFalhar(Long id) {
        return professorRepository.findByIdAndUsuario_IsAtivo(id, true)
-               .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Usuario de id: %d não encontrado.", id)));
+               .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
+    }
+
+    @Transactional
+    public void inativar(Long id) {
+        Professor professor = professorRepository.findById(id)
+                        .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
+        usuarioService.inativar(professor.getUsuario().getId());
     }
 }
