@@ -1,4 +1,5 @@
 - 
+- ISSUE-26: Cria endpoint para inativar professor 
 - ISSUE-25: Refatoracao geral
 - ISSUE-24: Cria endpoint para atualizar professor 
 - ISSUE-23: Cria endpoint para cadastro de professor
