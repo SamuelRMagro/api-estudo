@@ -107,4 +107,21 @@ public class ProfessorController {
             @Valid @RequestBody ProfessorUpdateDTO updateDTO, @PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.atualizarProfessor(updateDTO, id));
     }
+
+    @Operation(
+            summary = "Inativação de usuario do professor",
+            description = "Inativa o status do usuario de professor por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProfessorResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PatchMapping("/{id}/inativar")
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+        service.inativar(id);
+        return ResponseEntity.noContent().build();
+    }
 }
