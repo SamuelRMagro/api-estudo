@@ -1,4 +1,4 @@
-package com.example.demo.specifictions.aluno;
+package com.example.demo.specifictions;
 
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Usuario;

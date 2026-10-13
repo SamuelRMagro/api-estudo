@@ -1,4 +1,4 @@
-package com.example.demo.specifictions.curso;
+package com.example.demo.specifictions;
 
 import com.example.demo.model.Curso;
 import org.springframework.data.jpa.domain.Specification;

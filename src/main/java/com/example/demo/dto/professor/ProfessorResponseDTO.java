@@ -1,15 +1,11 @@
 package com.example.demo.dto.professor;
 
+import com.example.demo.dto.usuario.UsuarioResponseDTO;
+
 import java.time.LocalDate;
 
 public record ProfessorResponseDTO(
-        Long id,
-        Long usuarioId,
-        String nome,
-        String email,
-        String cpf,
-        Boolean ativo,
-        LocalDate dataAdmissao,
-        LocalDate dataCriacao,
-        LocalDate dataAtualizacao){
+        UsuarioResponseDTO usuario,
+        LocalDate dataAdmissao
+) {
 }
