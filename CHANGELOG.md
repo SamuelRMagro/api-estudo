@@ -1,4 +1,5 @@
 
+- ISSUE-28: Cria endpoint para busca de discilpina por Id
 - ISSUE-27: Cria endpoint para listar disciplina com filtros e paginados
 - ISSUE-26: Cria endpoint para inativar professor 
 - ISSUE-25: Refatoracao geral

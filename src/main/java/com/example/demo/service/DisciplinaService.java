@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.disciplina.DisciplinaFilterRequest;
 import com.example.demo.dto.disciplina.DisciplinaResponseDTO;
+import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.DisciplinaMapper;
 import com.example.demo.model.Disciplina;
 import com.example.demo.repository.DisciplinaRepository;
@@ -30,5 +31,12 @@ public class DisciplinaService {
 
         Page<Disciplina> disciplinaPage = disciplinaRepository.findAll(spec, pageable);
         return disciplinaPage.map(disciplinaMapper::fromEntityToDTO);
+    }
+
+    public DisciplinaResponseDTO buscarOuFalhar(Long id) {
+        Disciplina disciplina = disciplinaRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Disciplina de id: %d não encontrado", id)));
+
+        return disciplinaMapper.fromEntityToDTO(disciplina);
     }
 }

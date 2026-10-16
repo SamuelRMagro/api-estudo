@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,5 +53,21 @@ public class DisciplinaController {
             ) Pageable pageable, @ParameterObject DisciplinaFilterRequest request) {
         Page<DisciplinaResponseDTO> disciplinas = service.listarDisciplinas(pageable, request);
         return ResponseEntity.ok(disciplinas);
+    }
+
+    @Operation(
+            summary = "Consulta de disciplina",
+            description = "Busca disciplina por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DisciplinaResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<DisciplinaResponseDTO> buscaDisciplinaId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarOuFalhar(id));
     }
 }
