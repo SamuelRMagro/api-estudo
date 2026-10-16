@@ -65,4 +65,16 @@ public class DisciplinaService {
         disciplinaRepository.save(disciplina);
         return disciplinaMapper.fromEntityToDTO(disciplina);
     }
+
+    public void inativar(Long id) {
+        Disciplina disciplina = buscarOuFalharEntity(id);
+
+        if (disciplina.inativo()) {
+            return;
+        } else {
+            disciplina.setIsAtivo(false);
+            disciplina.setDataAtualizacao(LocalDateTime.now());
+            disciplinaRepository.save(disciplina);
+        }
+    }
 }
