@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,5 +55,21 @@ public class AlunoController {
             ) Pageable pageable, @Valid @ParameterObject AlunoFilterRequest request){
         Page<AlunoResponseDTO> alunos = service.listagemAlunos(pageable, request);
         return ResponseEntity.ok(alunos);
+    }
+
+    @Operation(
+            summary = "Busca de aluno",
+            description = "Busca aluno por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AlunoResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<AlunoResponseDTO> buscaAlunoId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarOuFalhar(id));
     }
 }
