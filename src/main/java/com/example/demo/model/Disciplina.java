@@ -24,7 +24,7 @@ public class Disciplina {
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String ementa;
 
     @Column(name = "is_ativo", nullable = false)
@@ -40,4 +40,10 @@ public class Disciplina {
 
     @Column(name = "data_atualizacao", columnDefinition = "TIMESTAMP DEFAULT NULL")
     private LocalDateTime dataAtualizacao;
+
+    public Disciplina(String nome, String ementa, Integer cargaHoraria) {
+        this.nome = nome;
+        this.ementa = ementa;
+        this.cargaHoraria = cargaHoraria;
+    }
 }
