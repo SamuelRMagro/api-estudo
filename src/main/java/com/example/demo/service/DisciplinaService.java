@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.disciplina.DisciplinaCreateDTO;
 import com.example.demo.dto.disciplina.DisciplinaFilterRequest;
 import com.example.demo.dto.disciplina.DisciplinaResponseDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
@@ -36,6 +37,14 @@ public class DisciplinaService {
     public DisciplinaResponseDTO buscarOuFalhar(Long id) {
         Disciplina disciplina = disciplinaRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Disciplina de id: %d não encontrado", id)));
+
+        return disciplinaMapper.fromEntityToDTO(disciplina);
+    }
+
+    public DisciplinaResponseDTO cadastrarDisciplina(DisciplinaCreateDTO createDTO) {
+        Disciplina disciplina = new Disciplina(createDTO.nome(), createDTO.ementa(), createDTO.cargaHoraria());
+
+        disciplinaRepository.save(disciplina);
 
         return disciplinaMapper.fromEntityToDTO(disciplina);
     }
