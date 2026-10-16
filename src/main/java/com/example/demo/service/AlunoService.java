@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
+import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.AlunoMapper;
 import com.example.demo.model.Aluno;
 import com.example.demo.repository.AlunoRepository;
@@ -32,5 +33,11 @@ public class AlunoService {
         Page<Aluno> alunoPage = alunoRepository.findAll(spec, pageable);
 
         return alunoPage.map(mapper::fromEntityToDTO);
+    }
+
+    public AlunoResponseDTO buscarOuFalhar(Long id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado", id)));
+        return mapper.fromEntityToDTO(aluno);
     }
 }
