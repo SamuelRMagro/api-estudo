@@ -1,4 +1,5 @@
 
+- ISSUE-30: Cria endpoint para atualizar discilpina
 - ISSUE-29: Cria endpoint para cadastro de discilpina
 - ISSUE-28: Cria endpoint para busca de discilpina por Id
 - ISSUE-27: Cria endpoint para listar disciplina com filtros e paginados
