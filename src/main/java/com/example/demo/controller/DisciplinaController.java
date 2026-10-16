@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.disciplina.DisciplinaCreateDTO;
 import com.example.demo.dto.disciplina.DisciplinaFilterRequest;
 import com.example.demo.dto.disciplina.DisciplinaResponseDTO;
+import com.example.demo.dto.disciplina.DisciplinaUpdateDTO;
 import com.example.demo.service.DisciplinaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -88,5 +89,24 @@ public class DisciplinaController {
     public ResponseEntity<DisciplinaResponseDTO> cadastrar(
             @Valid @RequestBody DisciplinaCreateDTO createDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrarDisciplina(createDTO));
+    }
+
+    @Operation(
+            summary = "Atualização de disciplina",
+            description = "Altera dados da disciplina por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DisciplinaResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<DisciplinaResponseDTO> atualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody DisciplinaUpdateDTO updateDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.atualizarCurso(id, updateDTO));
     }
 }

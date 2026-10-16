@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.disciplina.DisciplinaCreateDTO;
 import com.example.demo.dto.disciplina.DisciplinaFilterRequest;
 import com.example.demo.dto.disciplina.DisciplinaResponseDTO;
+import com.example.demo.dto.disciplina.DisciplinaUpdateDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.DisciplinaMapper;
 import com.example.demo.model.Disciplina;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class DisciplinaService {
@@ -46,6 +49,20 @@ public class DisciplinaService {
 
         disciplinaRepository.save(disciplina);
 
+        return disciplinaMapper.fromEntityToDTO(disciplina);
+    }
+
+    private Disciplina buscarOuFalharEntity(Long id) {
+        return disciplinaRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Disciplina de id: %d não encontrado", id)));
+    }
+
+    public DisciplinaResponseDTO atualizarCurso(Long id, DisciplinaUpdateDTO updateDTO) {
+        Disciplina disciplina = buscarOuFalharEntity(id);
+        disciplinaMapper.fromUpdateDTOtoEntity(disciplina, updateDTO);
+        disciplina.setDataAtualizacao(LocalDateTime.now());
+
+        disciplinaRepository.save(disciplina);
         return disciplinaMapper.fromEntityToDTO(disciplina);
     }
 }
