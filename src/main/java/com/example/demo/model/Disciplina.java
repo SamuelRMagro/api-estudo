@@ -46,4 +46,16 @@ public class Disciplina {
         this.ementa = ementa;
         this.cargaHoraria = cargaHoraria;
     }
+
+    public boolean ativo() {
+
+        if (!isAtivo) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean inativo() {
+        return !ativo();
+    }
 }
