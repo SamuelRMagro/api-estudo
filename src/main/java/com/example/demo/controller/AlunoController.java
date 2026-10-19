@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.aluno.AlunoCreateDTO;
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
 import com.example.demo.service.AlunoService;
@@ -16,12 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/alunos")
@@ -71,5 +70,22 @@ public class AlunoController {
     @GetMapping("/{id}")
     public ResponseEntity<AlunoResponseDTO> buscaAlunoId(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarOuFalhar(id));
+    }
+
+    @Operation(
+            summary = "Cadastro de aluno",
+            description = "Cadastrar alunos"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Objeto criado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AlunoResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PostMapping
+    public ResponseEntity<AlunoResponseDTO> cadastrar(
+            @Valid @RequestBody AlunoCreateDTO createDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrarAluno(createDTO));
     }
 }
