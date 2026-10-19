@@ -91,8 +91,8 @@ public class ProfessorController {
     }
 
     @Operation(
-            summary = "Atualização de usuario",
-            description = "Altera dados do usuario por Id"
+            summary = "Atualização de professor",
+            description = "Altera dados do professor por Id"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",

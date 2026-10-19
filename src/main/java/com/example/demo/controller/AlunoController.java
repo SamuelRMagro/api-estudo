@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.aluno.AlunoCreateDTO;
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
+import com.example.demo.dto.aluno.AlunoUpdateDTO;
 import com.example.demo.service.AlunoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -87,5 +88,23 @@ public class AlunoController {
     public ResponseEntity<AlunoResponseDTO> cadastrar(
             @Valid @RequestBody AlunoCreateDTO createDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrarAluno(createDTO));
+    }
+
+    @Operation(
+            summary = "Atualização de aluno",
+            description = "Altera dados do aluno por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AlunoResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<AlunoResponseDTO> atualizar(
+            @Valid @RequestBody AlunoUpdateDTO updateDTO, @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.atualizarAluno(updateDTO, id));
     }
 }
