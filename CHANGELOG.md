@@ -1,4 +1,5 @@
 
+- ISSUE-33: Cria endpoint para cadastro de aluno
 - ISSUE-32: Cria endpoint para busca de aluno por Id
 - ISSUE-31: Cria endpoint para inativar disciplina
 - ISSUE-30: Cria endpoint para atualizar disciplina
