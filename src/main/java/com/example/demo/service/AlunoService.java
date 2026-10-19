@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.aluno.AlunoCreateDTO;
 import com.example.demo.dto.aluno.AlunoFilterRequest;
 import com.example.demo.dto.aluno.AlunoResponseDTO;
+import com.example.demo.dto.aluno.AlunoUpdateDTO;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.AlunoMapper;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -69,5 +71,23 @@ public class AlunoService {
         LocalDate hoje = LocalDate.now();
 
         return Period.between(nascimento, hoje).getYears();
+    }
+
+    @Transactional
+    public AlunoResponseDTO atualizarAluno(@Valid AlunoUpdateDTO updateDTO, Long id) {
+        Aluno aluno = buscarUsuarioAtivoOuFalhar(id);
+
+        var usuarioResponseDTO = usuarioService.atualizar(updateDTO.usuario(), aluno.getUsuario().getId());
+
+        aluno.setDataNascimento(updateDTO.dataNascimento());
+        aluno.getUsuario().setIdade(calculaIdade(updateDTO.dataNascimento()));
+        aluno.setTelefone(StringUtils.hasText(updateDTO.telefone()) ? updateDTO.telefone().trim() : null);
+
+        return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
+    }
+
+    private Aluno buscarUsuarioAtivoOuFalhar(Long id) {
+        return alunoRepository.findByIdAndUsuario_IsAtivo(id, true)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado.", id)));
     }
 }
