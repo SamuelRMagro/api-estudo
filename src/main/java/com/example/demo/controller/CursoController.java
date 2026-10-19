@@ -117,7 +117,7 @@ public class CursoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Objeto atualizado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CursoResponseDTO.class))),
+                            schema = @Schema(implementation = Void.class))),
             @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
     })
