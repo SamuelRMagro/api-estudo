@@ -90,4 +90,11 @@ public class AlunoService {
         return alunoRepository.findByIdAndUsuario_IsAtivo(id, true)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado.", id)));
     }
+
+    @Transactional
+    public void inativarAluno(Long id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado!", id)));
+        usuarioService.inativar(aluno.getUsuario().getId());
+    }
 }
