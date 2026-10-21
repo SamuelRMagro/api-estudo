@@ -1,4 +1,6 @@
 
+
+- ISSUE-27: Cria endpoint para listar titulacoes com filtros e paginadas
 - ISSUE-35: Cria endpoint para inativar aluno
 - ISSUE-34: Cria endpoint para atualizar aluno
 - ISSUE-33: Cria endpoint para cadastro de aluno
