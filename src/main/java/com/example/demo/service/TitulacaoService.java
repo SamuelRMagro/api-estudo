@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.titulacao.TitulacaoFilterRequest;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
+import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.TitulacaoMapper;
 import com.example.demo.model.Titulacao;
 import com.example.demo.repository.TitulacaoRepository;
@@ -30,5 +31,12 @@ public class TitulacaoService {
         Page<Titulacao> titulacaoPage = titulacaoRepository.findAll(spec, pageable);
 
         return titulacaoPage.map(titulacaoMapper::fromEntityToDTO);
+    }
+
+    public TitulacaoResponseDTO buscarOuFalhar(Long id) {
+        Titulacao titulacao = titulacaoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada", id)));
+
+        return titulacaoMapper.fromEntityToDTO(titulacao);
     }
 }
