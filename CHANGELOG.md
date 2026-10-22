@@ -1,5 +1,6 @@
 
 
+- ISSUE-40: Cria endpoint para inativar titulacao
 - ISSUE-39: Cria endpoint para atualizar titulacao
 - ISSUE-38: Cria endpoint para cadastro de titulacao
 - ISSUE-37: Cria endpoint para busca de titulacao por Id
