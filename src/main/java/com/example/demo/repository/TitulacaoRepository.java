@@ -14,7 +14,7 @@ import java.util.List;
 public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, JpaSpecificationExecutor<Titulacao> {
 
     @Query(value = """
-        SELECT  t.id, t.area, t.nome
+        SELECT  t.id, t.area, t.nome, t.is_ativo
         FROM tb_titulacoes t
         join tb_professor_titulacoes pt on t.id = pt.titulacao_id
         where pt.professor_id = :professorId

@@ -107,4 +107,21 @@ public class TitulacaoController {
             @Valid @RequestBody TitulacaoUpdateDTO updateDTO, @PathVariable Long id) {
         return ResponseEntity.ok(titulacaoService.atualizar(updateDTO, id));
     }
+
+    @Operation(
+            summary = "Inativação de titulacao",
+            description = "Inativa o status do titulacao por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PatchMapping("/{id}/inativar")
+    public ResponseEntity<Void> inativar(@PathVariable Long id) {
+        titulacaoService.inativar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
