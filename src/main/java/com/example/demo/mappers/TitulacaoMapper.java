@@ -1,5 +1,6 @@
 package com.example.demo.mappers;
 
+import com.example.demo.dto.titulacao.TitulacaoCreateDTO;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
 import com.example.demo.model.Titulacao;
 import org.mapstruct.Mapper;
@@ -8,4 +9,6 @@ import org.mapstruct.Mapper;
 public interface TitulacaoMapper {
 
     TitulacaoResponseDTO fromEntityToDTO(Titulacao titulacao);
+
+    Titulacao fromDTOtoEntity(TitulacaoCreateDTO createDTO);
 }
