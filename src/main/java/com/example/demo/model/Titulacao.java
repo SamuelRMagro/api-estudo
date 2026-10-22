@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,4 +27,8 @@ public class Titulacao {
 
     @OneToMany(mappedBy = "titulacao")
     private Set<ProfessorTitulacao> professores = new HashSet<>();
+
+    @Column(name = "is_ativo", nullable = false)
+    @ColumnDefault("true")
+    private Boolean isAtivo = true;
 }
