@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,5 +55,21 @@ public class TitulacaoController {
             ) Pageable pageable, @Valid @ParameterObject TitulacaoFilterRequest request) {
         Page<TitulacaoResponseDTO> titulacoes = titulacaoService.listagemTitulacoes(pageable, request);
         return ResponseEntity.ok(titulacoes);
+    }
+
+    @Operation(
+            summary = "Busca de titulacao",
+            description = "Busca titulacao por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TitulacaoResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<TitulacaoResponseDTO> buscaTitulacaoId(@PathVariable Long id) {
+        return ResponseEntity.ok(titulacaoService.buscarOuFalhar(id));
     }
 }
