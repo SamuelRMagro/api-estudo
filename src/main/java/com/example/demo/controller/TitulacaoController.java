@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.titulacao.TitulacaoCreateDTO;
 import com.example.demo.dto.titulacao.TitulacaoFilterRequest;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
 import com.example.demo.service.TitulacaoService;
@@ -16,12 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/titulacoes")
@@ -71,5 +70,22 @@ public class TitulacaoController {
     @GetMapping("/{id}")
     public ResponseEntity<TitulacaoResponseDTO> buscaTitulacaoId(@PathVariable Long id) {
         return ResponseEntity.ok(titulacaoService.buscarOuFalhar(id));
+    }
+
+    @Operation(
+            summary = "Cadastro de titulacao",
+            description = "Cadastrar titulacoes"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Objeto criado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TitulacaoResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PostMapping
+    public ResponseEntity<TitulacaoResponseDTO> cadastrar(
+            @Valid @RequestBody TitulacaoCreateDTO createDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(titulacaoService.cadastrarTitulacao(createDTO));
     }
 }
