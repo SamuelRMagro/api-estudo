@@ -11,7 +11,7 @@ public record TitulacaoCreateDTO(
         @Size(min = 5, max = 255, message = "O campo nome deve ter entre {min} e {max} caracteres")
         String nome,
 
-        @Schema(description = "Nome da titulacao")
+        @Schema(description = "Area da titulacao")
         @NotNull(message = "O campo area não deve ser nulo")
         @Size(min = 3, max = 100, message = "O campo area deve ter entre {min} e {max} caracteres")
         String area

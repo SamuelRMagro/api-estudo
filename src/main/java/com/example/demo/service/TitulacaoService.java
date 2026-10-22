@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.titulacao.TitulacaoCreateDTO;
 import com.example.demo.dto.titulacao.TitulacaoFilterRequest;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
+import com.example.demo.dto.titulacao.TitulacaoUpdateDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.mappers.TitulacaoMapper;
 import com.example.demo.model.Titulacao;
@@ -46,5 +47,18 @@ public class TitulacaoService {
         titulacaoRepository.save(titulacao);
 
         return titulacaoMapper.fromEntityToDTO(titulacao);
+    }
+
+    public TitulacaoResponseDTO atualizar(@Valid TitulacaoUpdateDTO updateDTO, Long id) {
+        Titulacao titulacao = buscarOuFalharEntity(id);
+        titulacaoMapper.fromUpdateDTOtoEntity(titulacao, updateDTO);
+        titulacaoRepository.save(titulacao);
+
+        return titulacaoMapper.fromEntityToDTO(titulacao);
+    }
+
+    private Titulacao buscarOuFalharEntity(Long id) {
+        return titulacaoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada", id)));
     }
 }

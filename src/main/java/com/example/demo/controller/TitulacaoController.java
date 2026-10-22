@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.titulacao.TitulacaoCreateDTO;
 import com.example.demo.dto.titulacao.TitulacaoFilterRequest;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
+import com.example.demo.dto.titulacao.TitulacaoUpdateDTO;
 import com.example.demo.service.TitulacaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -87,5 +88,23 @@ public class TitulacaoController {
     public ResponseEntity<TitulacaoResponseDTO> cadastrar(
             @Valid @RequestBody TitulacaoCreateDTO createDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(titulacaoService.cadastrarTitulacao(createDTO));
+    }
+
+    @Operation(
+            summary = "Atualização de titulacao",
+            description = "Altera dados da titulacao por Id"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TitulacaoResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<TitulacaoResponseDTO> atualizar(
+            @Valid @RequestBody TitulacaoUpdateDTO updateDTO, @PathVariable Long id) {
+        return ResponseEntity.ok(titulacaoService.atualizar(updateDTO, id));
     }
 }
