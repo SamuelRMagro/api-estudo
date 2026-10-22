@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_professor_titulacoes",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"professor_id", "titulacao_id", "data_inicio"}))
+@Table(name = "tb_professor_titulacoes")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,4 +33,16 @@ public class ProfessorTitulacao {
     private LocalDate dataInicio;
 
     private LocalDate dataTermino;
+
+    @Column(name = "vinculo", nullable = false)
+    @ColumnDefault("true")
+    private Boolean isAtivo = true;
+
+    @Column(nullable = false, updatable = false)
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Generated(event = EventType.INSERT)
+    private LocalDateTime dataCriacao = LocalDateTime.now();
+
+    @Column(columnDefinition = "TIMESTAMP DEFAULT NULL")
+    private LocalDateTime dataAtualizacao;
 }
