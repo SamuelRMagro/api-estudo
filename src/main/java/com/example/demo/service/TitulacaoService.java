@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TitulacaoService {
@@ -42,6 +43,7 @@ public class TitulacaoService {
         return titulacaoMapper.fromEntityToDTO(titulacao);
     }
 
+    @Transactional
     public TitulacaoResponseDTO cadastrarTitulacao(@Valid TitulacaoCreateDTO createDTO) {
         Titulacao titulacao = titulacaoMapper.fromDTOtoEntity(createDTO);
         titulacaoRepository.save(titulacao);
@@ -49,6 +51,7 @@ public class TitulacaoService {
         return titulacaoMapper.fromEntityToDTO(titulacao);
     }
 
+    @Transactional
     public TitulacaoResponseDTO atualizar(@Valid TitulacaoUpdateDTO updateDTO, Long id) {
         Titulacao titulacao = buscarOuFalharEntity(id);
         titulacaoMapper.fromUpdateDTOtoEntity(titulacao, updateDTO);
@@ -60,5 +63,15 @@ public class TitulacaoService {
     private Titulacao buscarOuFalharEntity(Long id) {
         return titulacaoRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada", id)));
+    }
+
+    @Transactional
+    public void inativar(Long id) {
+        Titulacao titulacao = buscarOuFalharEntity(id);
+
+        if (titulacao.getIsAtivo()){
+            titulacao.setIsAtivo(false);
+            titulacaoRepository.save(titulacao);
+        }
     }
 }
