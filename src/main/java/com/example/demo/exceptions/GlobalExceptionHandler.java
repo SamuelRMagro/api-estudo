@@ -4,6 +4,7 @@ import com.example.demo.dto.exception.ErroCampo;
 import com.example.demo.dto.exception.ErroDTO;
 import com.example.demo.exceptions.custom.CadastroInvalidoCustomException;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
+import com.example.demo.exceptions.custom.VinculoJaExistente;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +66,16 @@ public class GlobalExceptionHandler {
         body.put("erros", null);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(VinculoJaExistente.class)
+    public ResponseEntity<ErroDTO> error(VinculoJaExistente ex) {
+        ErroDTO erro = new ErroDTO(
+                HttpStatus.CONFLICT.value(),
+                "Erro de validação",
+                ex.getMessage(),
+                System.currentTimeMillis()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 }
