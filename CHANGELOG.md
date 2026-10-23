@@ -1,5 +1,6 @@
 
 
+- ISSUE-42: Cria endpoint relacionamento de prof e titu
 - ISSUE-41: Atualiza tabela professortitulacao
 - ISSUE-40: Cria endpoint para inativar titulacao
 - ISSUE-39: Cria endpoint para atualizar titulacao
