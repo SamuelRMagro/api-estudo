@@ -1,12 +1,17 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.professor.*;
+import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoCreateDTO;
+import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoResponseDTO;
 import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
+import com.example.demo.exceptions.custom.VinculoJaExistente;
 import com.example.demo.mappers.ProfessorMapper;
 import com.example.demo.mappers.ProfessorTitulacaoMapper;
 import com.example.demo.model.Professor;
+import com.example.demo.model.ProfessorTitulacao;
+import com.example.demo.model.Titulacao;
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.ProfessorRepository;
 import com.example.demo.repository.ProfessorTitulacaoRepository;
@@ -33,7 +38,7 @@ public class ProfessorService {
     private final ProfessorTitulacaoRepository professorTitulacaoRepository;
     private final ProfessorTitulacaoMapper professorTitulacaoMapper;
 
-    public ProfessorService(ProfessorRepository professorRepository, TitulacaoRepository titulacaoRepository, UsuarioService usuarioService, ProfessorMapper professorMapper) {
+    public ProfessorService(ProfessorRepository professorRepository, TitulacaoRepository titulacaoRepository, UsuarioService usuarioService, ProfessorMapper professorMapper, ProfessorTitulacaoRepository professorTitulacaoRepository, ProfessorTitulacaoMapper professorTitulacaoMapper) {
         this.professorRepository = professorRepository;
         this.titulacaoRepository = titulacaoRepository;
         this.usuarioService = usuarioService;
