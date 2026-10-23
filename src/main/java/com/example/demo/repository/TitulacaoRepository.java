@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, JpaSpecificationExecutor<Titulacao> {
@@ -20,4 +21,6 @@ public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, Jpa
         where pt.professor_id = :professorId
 """, nativeQuery = true)
     List<TitulacaoResponseDTO> buscaTitulacoesProfessorId(@Param("professorId") Long professorId);
+
+    Optional<Titulacao> findByIdAndIsAtivo(Long id, Boolean isAtivo);
 }
