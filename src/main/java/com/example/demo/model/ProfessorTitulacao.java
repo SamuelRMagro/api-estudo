@@ -45,4 +45,11 @@ public class ProfessorTitulacao {
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT NULL")
     private LocalDateTime dataAtualizacao;
+
+    public ProfessorTitulacao(Professor professorId, Titulacao titulacaoId, LocalDate dataInicio, LocalDate dataTermino) {
+        this.professor = professorId;
+        this.titulacao = titulacaoId;
+        this.dataInicio = dataInicio;
+        this.dataTermino = dataTermino;
+    }
 }
