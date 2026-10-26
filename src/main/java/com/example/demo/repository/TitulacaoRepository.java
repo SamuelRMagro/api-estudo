@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
+import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
 import com.example.demo.model.Titulacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -15,12 +15,14 @@ import java.util.Optional;
 public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, JpaSpecificationExecutor<Titulacao> {
 
     @Query(value = """
-        SELECT  t.id, t.area, t.nome, t.is_ativo
+        SELECT pt.id AS vinc_id, t.id AS titu_id, t.nome AS titu_nome,\s
+        t.area AS titu_area, pt.data_inicio AS vinc_inicio,\s
+        pt.data_termino AS vinc_termino, pt.vinculo AS vinc_ativo
         FROM tb_titulacoes t
-        join tb_professor_titulacoes pt on t.id = pt.titulacao_id
-        where pt.professor_id = :professorId
+        JOIN tb_professor_titulacoes pt ON pt.titulacao_id = t.id
+        WHERE pt.professor_id = :professorId
 """, nativeQuery = true)
-    List<TitulacaoResponseDTO> buscaTitulacoesProfessorId(@Param("professorId") Long professorId);
+    List<ProfessorIdTitulacoesResponseDTO> buscaTitulacoesProfessorId(@Param("professorId") Long professorId);
 
     Optional<Titulacao> findByIdAndIsAtivo(Long id, Boolean isAtivo);
 }
