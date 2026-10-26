@@ -1,5 +1,6 @@
 
 
+- ISSUE-45: Cria endpoint para inativar vinculo
 - ISSUE-44: Cria endpoint para atualizar datas de vinculo
 - ISSUE-43: Atualiza endpoint de busca de professor por id
 - ISSUE-42: Cria endpoint relacionamento de prof e titu

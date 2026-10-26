@@ -138,8 +138,7 @@ public class ProfessorService {
     public ProfessorTitulacaoResponseDTO atualizarDatas(Long id, Long vinculoId, @Valid ProfessorTitulacaoDatasUpdateDTO datasUpdateDTO) {
 
         Professor professor = buscarUsuarioAtivoOuFalhar(id);
-        ProfessorTitulacao vinculo = professorTitulacaoRepository.findById(vinculoId)
-                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Vinculo de id: %d não encontrado ou inativo.", vinculoId)));
+        ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
         Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(vinculo.getTitulacao().getId());
 
         if (!(vinculo.getProfessor().getId() == id)) {
@@ -154,5 +153,33 @@ public class ProfessorService {
 
         ProfessorTitulacao vinculoAtualizado = professorTitulacaoRepository.save(vinculo);
         return professorTitulacaoMapper.fromEntityToDTO(vinculoAtualizado);
+    }
+
+    private Professor buscaProfessor(Long id) {
+        return professorRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
+    }
+
+    private ProfessorTitulacao buscaVinculo(Long id) {
+        return professorTitulacaoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Vinculo de id: %d não encontrado.", id)));
+    }
+
+    @Transactional
+    public void inativarVinculo(Long id, Long vinculoId) {
+
+        Professor professor = buscaProfessor(id);
+        ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
+
+        if (!(vinculo.getProfessor().getId() == id)) {
+            throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
+        }
+
+        if (vinculo.getIsAtivo()){
+            vinculo.setDataAtualizacao(LocalDateTime.now());
+            vinculo.setIsAtivo(false);
+        }
+
+        professorTitulacaoRepository.save(vinculo);
     }
 }
