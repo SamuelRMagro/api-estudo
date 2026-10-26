@@ -17,10 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 @Service
 public class AlunoService {
@@ -62,7 +62,7 @@ public class AlunoService {
         Aluno aluno = alunoMapper.fromCreateDtoToEntity(createDTO);
         aluno.setUsuario(usuarioSaved);
         aluno.getUsuario().setIdade(calculaIdade(createDTO.dataNascimento()));
-        aluno.setTelefone(createDTO.telefone().replaceAll("\\D", ""));
+        aluno.setTelefone(Objects.isNull(createDTO.telefone()) ? null : createDTO.telefone().replaceAll("\\D", ""));
 
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
     }
@@ -75,19 +75,19 @@ public class AlunoService {
 
     @Transactional
     public AlunoResponseDTO atualizarAluno(@Valid AlunoUpdateDTO updateDTO, Long id) {
-        Aluno aluno = buscarUsuarioAtivoOuFalhar(id);
+        Aluno aluno = buscarUsuario(id);
 
-        var usuarioResponseDTO = usuarioService.atualizar(updateDTO.usuario(), aluno.getUsuario().getId());
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(updateDTO.usuario(), aluno.getUsuario().getId());
 
         aluno.setDataNascimento(updateDTO.dataNascimento());
         aluno.getUsuario().setIdade(calculaIdade(updateDTO.dataNascimento()));
-        aluno.setTelefone(StringUtils.hasText(updateDTO.telefone()) ? updateDTO.telefone().trim() : null);
+        aluno.setTelefone(Objects.isNull(updateDTO.telefone()) ? null : updateDTO.telefone().replaceAll("\\D", ""));
 
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
     }
 
-    private Aluno buscarUsuarioAtivoOuFalhar(Long id) {
-        return alunoRepository.findByIdAndUsuario_IsAtivo(id, true)
+    private Aluno buscarUsuario(Long id) {
+        return alunoRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado.", id)));
     }
 
