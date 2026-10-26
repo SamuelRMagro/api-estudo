@@ -1,20 +1,20 @@
 package com.example.demo.dto.professor;
 
-import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
+import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public record ProfessorIdResponseDTO(
-        Long id,
-        Long usuarioId,
-        String nome,
-        String email,
-        String cpf,
-        Boolean ativo,
-        LocalDate dataAdmissao,
-        LocalDate dataCriacao,
-        LocalDate dataAtualizacao,
-        List<TitulacaoResponseDTO> titulacoes
+        Long profId,
+        Long userId,
+        String userNome,
+        String userEmail,
+        String userCpf,
+        Boolean userAtivo,
+        LocalDate userDataCriacao,
+        LocalDate userDataAtualizacao,
+        LocalDate profDataAdmissao,
+        List<ProfessorIdTitulacoesResponseDTO> titulacoes
 ) {
 }
