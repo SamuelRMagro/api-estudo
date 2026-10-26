@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.professor.*;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoCreateDTO;
+import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoDatasUpdateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoResponseDTO;
 import com.example.demo.service.ProfessorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -143,5 +144,24 @@ public class ProfessorController {
     public ResponseEntity<ProfessorTitulacaoResponseDTO> relacionamentoProfessorTitulacao(
             @PathVariable Long id, @Valid @RequestBody ProfessorTitulacaoCreateDTO createDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criaRelacionamentoProfTitu(createDTO, id));
+    }
+
+    @Operation(
+            summary = "Atualização de vínculo",
+            description = "Atualiza datas do vínculo por id de professor e de vínculo"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProfessorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PutMapping("/{id}/titulacoes/{vinculoId}")
+    public ResponseEntity<ProfessorTitulacaoResponseDTO> atualizaDatasVinculo(
+            @PathVariable Long id, @PathVariable Long vinculoId,
+            @Valid @RequestBody ProfessorTitulacaoDatasUpdateDTO datasUpdateDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.atualizarDatas(id, vinculoId, datasUpdateDTO));
     }
 }

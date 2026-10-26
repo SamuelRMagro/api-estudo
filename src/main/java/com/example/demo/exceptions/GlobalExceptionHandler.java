@@ -3,8 +3,9 @@ package com.example.demo.exceptions;
 import com.example.demo.dto.exception.ErroCampo;
 import com.example.demo.dto.exception.ErroDTO;
 import com.example.demo.exceptions.custom.CadastroInvalidoCustomException;
+import com.example.demo.exceptions.custom.DadosInconsistentesCustomException;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
-import com.example.demo.exceptions.custom.VinculoJaExistente;
+import com.example.demo.exceptions.custom.VinculoJaExistenteCustomException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,8 +69,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    @ExceptionHandler(VinculoJaExistente.class)
-    public ResponseEntity<ErroDTO> error(VinculoJaExistente ex) {
+    @ExceptionHandler(VinculoJaExistenteCustomException.class)
+    public ResponseEntity<ErroDTO> vinculoExistente(VinculoJaExistenteCustomException ex) {
+        ErroDTO erro = new ErroDTO(
+                HttpStatus.CONFLICT.value(),
+                "Erro de validação",
+                ex.getMessage(),
+                System.currentTimeMillis()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(DadosInconsistentesCustomException.class)
+    public  ResponseEntity<ErroDTO> dadosInconsistentes(DadosInconsistentesCustomException ex) {
         ErroDTO erro = new ErroDTO(
                 HttpStatus.CONFLICT.value(),
                 "Erro de validação",
