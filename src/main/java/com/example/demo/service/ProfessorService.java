@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.professor.*;
+import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoCreateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoResponseDTO;
-import com.example.demo.dto.titulacao.TitulacaoResponseDTO;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.exceptions.custom.VinculoJaExistente;
@@ -64,7 +64,7 @@ public class ProfessorService {
     public ProfessorIdResponseDTO buscarOuFalhar(Long id) {
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
-        List<TitulacaoResponseDTO> titulacoes = titulacaoRepository.buscaTitulacoesProfessorId(id);
+        List<ProfessorIdTitulacoesResponseDTO> titulacoes = titulacaoRepository.buscaTitulacoesProfessorId(id);
         return professorMapper.fromEntityToTitulacoes(professor, titulacoes);
     }
 
