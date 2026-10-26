@@ -153,7 +153,7 @@ public class ProfessorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Objeto atualizado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProfessorResponseDTO.class))),
+                            schema = @Schema(implementation = ProfessorTitulacaoResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Existem campo(s) inválido(s) na requisição", content = @Content),
             @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
@@ -163,5 +163,23 @@ public class ProfessorController {
             @PathVariable Long id, @PathVariable Long vinculoId,
             @Valid @RequestBody ProfessorTitulacaoDatasUpdateDTO datasUpdateDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(service.atualizarDatas(id, vinculoId, datasUpdateDTO));
+    }
+
+    @Operation(
+            summary = "Inativação do vículo",
+            description = "Inativa o status do vínculo por id de professor e de vínculo"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Objeto atualizado com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class))),
+            @ApiResponse(responseCode = "404", description = "Objeto não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor", content = @Content)
+    })
+    @PatchMapping("/{id}/titulacoes/{vinculoId}/inativar")
+    public ResponseEntity<Void> inativarVinculo(
+            @PathVariable Long id, @PathVariable Long vinculoId) {
+        service.inativarVinculo(id, vinculoId);
+        return ResponseEntity.noContent().build();
     }
 }
