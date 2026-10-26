@@ -3,10 +3,12 @@ package com.example.demo.service;
 import com.example.demo.dto.professor.*;
 import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoCreateDTO;
+import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoDatasUpdateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoResponseDTO;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
+import com.example.demo.exceptions.custom.DadosInconsistentesCustomException;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
-import com.example.demo.exceptions.custom.VinculoJaExistente;
+import com.example.demo.exceptions.custom.VinculoJaExistenteCustomException;
 import com.example.demo.mappers.ProfessorMapper;
 import com.example.demo.mappers.ProfessorTitulacaoMapper;
 import com.example.demo.model.Professor;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -95,7 +98,7 @@ public class ProfessorService {
 
     private Professor buscarUsuarioAtivoOuFalhar(Long id) {
        return professorRepository.findByIdAndUsuario_IsAtivo(id, true)
-               .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado.", id)));
+               .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Professor de id: %d não encontrado ou inativo.", id)));
     }
 
     @Transactional
@@ -127,7 +130,29 @@ public class ProfessorService {
         BigInteger vinculos = professorTitulacaoRepository.quantVinculos(dataInicio, professorId);
 
         if (vinculos.intValue() > 0) {
-            throw new VinculoJaExistente();
+            throw new VinculoJaExistenteCustomException();
         }
+    }
+
+    @Transactional
+    public ProfessorTitulacaoResponseDTO atualizarDatas(Long id, Long vinculoId, @Valid ProfessorTitulacaoDatasUpdateDTO datasUpdateDTO) {
+
+        Professor professor = buscarUsuarioAtivoOuFalhar(id);
+        ProfessorTitulacao vinculo = professorTitulacaoRepository.findById(vinculoId)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Vinculo de id: %d não encontrado ou inativo.", vinculoId)));
+        Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(vinculo.getTitulacao().getId());
+
+        if (!(vinculo.getProfessor().getId() == id)) {
+            throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
+        }
+
+        verificarVinculosProfTitu(datasUpdateDTO.vincDataInicio(), id);
+
+        vinculo.setDataInicio(datasUpdateDTO.vincDataInicio());
+        vinculo.setDataTermino(datasUpdateDTO.vincDataTermino());
+        vinculo.setDataAtualizacao(LocalDateTime.now());
+
+        ProfessorTitulacao vinculoAtualizado = professorTitulacaoRepository.save(vinculo);
+        return professorTitulacaoMapper.fromEntityToDTO(vinculoAtualizado);
     }
 }
