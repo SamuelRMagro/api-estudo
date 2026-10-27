@@ -1,5 +1,6 @@
 
 
+- ISSUE-51: Ajuste ordenação vinculos an busca de professor por id
 - ISSUE-50: Ajustes regras do status do vinculo
 - ISSUE-49: Correção verificação de vinculo
 - ISSUE-48: Confirmação de remoção da Constraint de Unicidade do Banco
