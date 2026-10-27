@@ -15,8 +15,9 @@ public interface ProfessorTitulacaoRepository extends JpaRepository<ProfessorTit
     @Query(value = """
         SELECT COUNT(*)
         FROM tb_titulacoes t
-        join tb_professor_titulacoes pt on t.id = pt.titulacao_id
-        where pt.professor_id = :professorId and pt.data_inicio = :dataInicio and pt.vinculo = true
+        JOIN tb_professor_titulacoes pt ON t.id = :titulacaoId
+        WHERE pt.professor_id = :professorId AND pt.data_inicio = :dataInicio AND pt.vinculo = true
     """, nativeQuery = true)
-    BigInteger quantVinculos(@Param("dataInicio") LocalDate dataInicio, @Param("professorId") Long professorId);
+    BigInteger quantVinculos(@Param("dataInicio") LocalDate dataInicio, @Param("professorId") Long professorId,
+                             @Param("titulacaoId") Long titulacaoId);
 }
