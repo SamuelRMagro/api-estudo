@@ -113,7 +113,7 @@ public class ProfessorService {
 
         Professor professor = buscarUsuarioAtivoOuFalhar(id);
         Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(createDTO.titulacaoId());
-        verificarVinculosProfTitu(createDTO.dataInicio(), id);
+        verificarVinculosProfTitu(createDTO.dataInicio(), id, titulacao.getId());
 
         ProfessorTitulacao vinculoSalvo = professorTitulacaoRepository.save(new ProfessorTitulacao(professor, titulacao, createDTO.dataInicio(),
                 createDTO.dataTermino()));
@@ -125,9 +125,9 @@ public class ProfessorService {
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada ou inativa.", id)));
     }
 
-    private void verificarVinculosProfTitu(LocalDate dataInicio, Long professorId) {
+    private void verificarVinculosProfTitu(LocalDate dataInicio, Long professorId, Long titulacaoId) {
 
-        BigInteger vinculos = professorTitulacaoRepository.quantVinculos(dataInicio, professorId);
+        BigInteger vinculos = professorTitulacaoRepository.quantVinculos(dataInicio, professorId, titulacaoId);
 
         if (vinculos.intValue() > 0) {
             throw new VinculoJaExistenteCustomException();
@@ -141,11 +141,11 @@ public class ProfessorService {
         ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
         Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(vinculo.getTitulacao().getId());
 
-        if (!(vinculo.getProfessor().getId() == id)) {
+        if (!(vinculo.getProfessor().getId().equals(id))) {
             throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
         }
 
-        verificarVinculosProfTitu(datasUpdateDTO.vincDataInicio(), id);
+        verificarVinculosParaDatas(datasUpdateDTO.vincDataInicio(), id, titulacao.getId());
 
         vinculo.setDataInicio(datasUpdateDTO.vincDataInicio());
         vinculo.setDataTermino(datasUpdateDTO.vincDataTermino());
@@ -153,6 +153,15 @@ public class ProfessorService {
 
         ProfessorTitulacao vinculoAtualizado = professorTitulacaoRepository.save(vinculo);
         return professorTitulacaoMapper.fromEntityToDTO(vinculoAtualizado);
+    }
+
+    private void verificarVinculosParaDatas(LocalDate dataInicio, Long professorId, Long titulacaoId) {
+
+        BigInteger vinculos = professorTitulacaoRepository.quantVinculos(dataInicio, professorId, titulacaoId);
+
+        if (vinculos.intValue() > 1) {
+            throw new VinculoJaExistenteCustomException();
+        }
     }
 
     private Professor buscaProfessor(Long id) {
