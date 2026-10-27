@@ -1,5 +1,6 @@
 
 
+- ISSUE-46: Refatora atualizacao de aluno e professor
 - ISSUE-45: Cria endpoint para inativar vinculo
 - ISSUE-44: Cria endpoint para atualizar datas de vinculo
 - ISSUE-43: Atualiza endpoint de busca de professor por id
