@@ -111,8 +111,8 @@ public class ProfessorService {
     @Transactional
     public ProfessorTitulacaoResponseDTO criaRelacionamentoProfTitu(ProfessorTitulacaoCreateDTO createDTO, Long id) {
 
-        Professor professor = buscarUsuarioAtivoOuFalhar(id);
-        Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(createDTO.titulacaoId());
+        Professor professor = buscaProfessor(id);
+        Titulacao titulacao = buscarTitulacao(createDTO.titulacaoId());
         verificarVinculosProfTitu(createDTO.dataInicio(), id, titulacao.getId());
 
         ProfessorTitulacao vinculoSalvo = professorTitulacaoRepository.save(new ProfessorTitulacao(professor, titulacao, createDTO.dataInicio(),
@@ -120,9 +120,9 @@ public class ProfessorService {
         return professorTitulacaoMapper.fromEntityToDTO(vinculoSalvo);
     }
 
-    private Titulacao buscarTitulacaoAtivaOuFalhar(Long id) {
-        return titulacaoRepository.findByIdAndIsAtivo(id, true)
-                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada ou inativa.", id)));
+    private Titulacao buscarTitulacao(Long id) {
+        return titulacaoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Titulação de id: %d não encontrada.", id)));
     }
 
     private void verificarVinculosProfTitu(LocalDate dataInicio, Long professorId, Long titulacaoId) {
@@ -137,9 +137,9 @@ public class ProfessorService {
     @Transactional
     public ProfessorTitulacaoResponseDTO atualizarDatas(Long id, Long vinculoId, @Valid ProfessorTitulacaoDatasUpdateDTO datasUpdateDTO) {
 
-        Professor professor = buscarUsuarioAtivoOuFalhar(id);
+        Professor professor = buscaProfessor(id);
         ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
-        Titulacao titulacao = buscarTitulacaoAtivaOuFalhar(vinculo.getTitulacao().getId());
+        Titulacao titulacao = buscarTitulacao(vinculo.getTitulacao().getId());
 
         if (!(vinculo.getProfessor().getId().equals(id))) {
             throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
