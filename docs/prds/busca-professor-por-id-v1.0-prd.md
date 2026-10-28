@@ -1,5 +1,7 @@
 # Busca de Professor por ID - Product Requirements Document (PRD)
 
+> **SUBSTITUÍDO** por [`busca-professor-por-id-v1.1-prd.md`](busca-professor-por-id-v1.1-prd.md) (resposta passa a incluir os vínculos de titulação do professor).
+
 ## Requirements Description
 
 ### Background

@@ -1,5 +1,7 @@
 # Atualização de Aluno - Product Requirements Document (PRD)
 
+> **SUBSTITUÍDO** por [`atualizacao-aluno-v1.1-prd.md`](atualizacao-aluno-v1.1-prd.md) (`login` deixa de ser editável).
+
 ## Requirements Description
 
 ### Background

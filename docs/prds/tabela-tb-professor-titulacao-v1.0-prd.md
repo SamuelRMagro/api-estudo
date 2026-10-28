@@ -1,5 +1,7 @@
 # Tabela tb_professor_titulacao - Product Requirements Document (PRD)
 
+> **SUBSTITUÍDO** por [`tabela-tb-professor-titulacao-v1.1-prd.md`](tabela-tb-professor-titulacao-v1.1-prd.md) (adiciona `ativo` e datas de auditoria; unicidade só entre vínculos ativos).
+
 ## Requirements Description
 
 ### Background

@@ -7,9 +7,8 @@ Idioma do projeto: **português do Brasil** (PRDs, mensagens de erro, comentári
 ## Estado atual
 
 - **Em implementação.** Cada entrega é uma issue (`ISSUE-NN`), registrada no `CHANGELOG.md` e feita numa branch `ISSUE-NN_descricao`.
-- **Implementado:** usuário, curso, professor e disciplina (todos os endpoints); aluno (listagem, busca, cadastro); entidades de titulação e professor-titulação.
-- **Em andamento:** atualização de aluno (ISSUE-34).
-- **Pendente (PRD pronto, sem código):** exclusão de aluno; endpoints de titulação.
+- **Implementado (até a ISSUE-47):** (a ISSUE-47 foi resolvida junto com a 46 e por isso não aparece no `CHANGELOG.md`) usuário, curso, professor, disciplina, aluno, titulação e professor-titulação (tabela v1.1, vincular, atualizar datas, remover vínculo, e busca de professor por id v1.1 com os vínculos). A atualização de aluno e professor v1.1 (sem `login`) também está no código (ISSUE-46).
+- **Pendente (sem PRD):** grade curricular, turmas e matrículas (ver "Próximo passo"). A revisão das ISSUE-41 a 47 achou desvios do código em relação aos PRDs; as correções estão em PRDs próprios (ver `docs/prds/INDEX.md`).
 - Os PRDs são agnósticos de tecnologia; a stack abaixo é a do código existente.
 - Contexto da sessão que originou os PRDs (feita no claude.ai, antes do uso pela linha de comando): @docs/CONTEXTO-SESSAO.md
 - Índice de todos os PRDs, com versão, score, issue e status: @docs/prds/INDEX.md
@@ -49,7 +48,7 @@ Campos por tabela (detalhes, tamanhos e validações estão nos PRDs):
 | `tb_alunos` (v2) | id, usuario_id (FK único), telefone (opcional), dataNascimento |
 | `tb_professores` | id, usuario_id (FK único), dataAdmissao |
 | `tb_titulacoes` (v1.1) | id, nome, area, ativo (default true) |
-| `tb_professor_titulacao` | id, professor_id, titulacao_id, dataInicio, dataTermino (opcional); o par professor+titulação pode se repetir |
+| `tb_professor_titulacao` (v1.1; nome físico `tb_professor_titulacoes`) | id, professor_id, titulacao_id, dataInicio, dataTermino (opcional), ativo (default true), dataCriacao, dataAtualizacao; professor+titulação+dataInicio é único só entre vínculos ativos |
 
 **Aluno e professor são extensões de usuário.** Nome, e-mail, CPF, `ativo` e datas de auditoria vêm de `usuarios` por join e **não** são duplicados nas tabelas de extensão. O cadastro de aluno/professor cria o usuário e a extensão **na mesma transação** (tudo ou nada).
 
@@ -91,20 +90,19 @@ Campos por tabela (detalhes, tamanhos e validações estão nos PRDs):
 3. **Inativação.** A inativação de usuário grava `dataInativacao` e devolve o objeto atualizado, com 204 se já inativo. A exclusão de professor/aluno só marca `ativo = false` e atualiza `dataAtualizacao`, sem `dataInativacao`. Decidir se elas devem reutilizar a inativação de usuário.
 4. **`idade` gravada vs `dataNascimento`.** No aluno, a idade é calculada no cadastro e gravada em `usuarios`, e fica desatualizada. Sugestão: calcular na leitura.
 5. **Exclusão de curso**: idempotência para curso já inativo está "a confirmar" (em professor, aluno, disciplina e titulação ficou idempotente).
-6. **Titulação inativa** pode receber novos vínculos com professor? Ainda indefinido.
-7. `tb_titulacoes` e `tb_professor_titulacao` não têm `dataCriacao`/`dataAtualizacao`.
+6. ~~Titulação inativa pode receber novos vínculos?~~ **Decidido (22/10/2026):** não; professor inativo também não. Vínculos existentes são preservados.
+7. `tb_titulacoes` não tem `dataCriacao`/`dataAtualizacao`. (`tb_professor_titulacao` ganha as duas na v1.1.)
 8. CPF: em `usuarios` é salvo só com números e exibido mascarado.
-9. **`login` editável?** A atualização de usuário diz que `login` não é editável; as atualizações de aluno e professor dizem que é editável (3–50, único).
+9. ~~`login` editável?~~ **Decidido (22/10/2026):** `login` **não** é editável em nenhuma atualização (usuário, aluno, professor). PRDs de atualização de aluno e professor foram para a v1.1. Implementado na ISSUE-46/47 (`login` saiu dos DTOs de atualização).
 10. **Filtros de usuário** (`filtros-listagem-usuarios-v1.0-prd.md`) fixam nomes (`isAtivo`, `dataCadastroInicio`/`Fim`, `cpfMascarado`, `dataCadastro`), contrariando "nomes livres" e o campo `dataCriacao`. Também têm limites de data próprios (1900–2100) e se contradizem sobre início = fim (linhas 68 e 101).
 11. **Tamanho de página**: convenção 10; o código usa 20 (`application.properties`); o PRD de filtros de usuário manda preservar o mecanismo existente.
-12. **`tb_titulacoes` v1.1** (com `ativo`) é citada aqui e no contexto da sessão, mas nem o PRD nem a entidade `Titulacao` têm `ativo`.
+12. **`tb_titulacoes` v1.1**: o campo `ativo` existe na entidade `Titulacao` (`isAtivo`), mas o PRD v1.1 não está na pasta (só a v1.0).
 13. **`entidade-listagem-aluno-v2.0-prd.md`** tem score 88, abaixo do mínimo de 90.
 
 ## Próximo passo
 
-1. Concluir a atualização de aluno (ISSUE-34) e implementar a exclusão de aluno.
-2. Implementar os endpoints de titulação (PRDs prontos).
-3. Especificar o recurso **professor-titulação** (vincular/desvincular titulações de um professor): decisões pendentes listadas em `docs/CONTEXTO-SESSAO.md`.
-4. Depois: grade curricular (`tb_curso_disciplina`), turmas e matrículas.
+1. **Implementar as correções da revisão das ISSUE-41 a 47** (feita em 27/10/2026), listadas em `docs/prds/INDEX.md` ("Correções da revisão"): duplicidade de vínculo, erros e status, ordenação da busca de professor e remoção da constraint antiga no banco (o `ddl-auto=update` não remove).
+2. **Fechar os pontos de atenção** 1, 3, 4, 5, 10, 11, 12 e 13.
+3. Depois: grade curricular (`tb_curso_disciplina`), turmas e matrículas, cada uma com `/requirements-clarity`.
 
 **Sem PRD, por decisão:** tabela `usuarios`, listagem/busca/cadastro/inativação de usuário, exclusão de professor e tabela `tb_disciplinas`. Foram implementados antes da documentação e ficam sem PRD por ora: para eles, **o código é a referência**. Não gere PRD retroativo sem o usuário pedir. Se um desses endpoints precisar mudar, especifique a mudança com `/requirements-clarity` antes.
