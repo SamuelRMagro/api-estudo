@@ -1,5 +1,7 @@
 # Atualização de Professor - Product Requirements Document (PRD)
 
+> **SUBSTITUÍDO** por [`atualizacao-professor-v1.1-prd.md`](atualizacao-professor-v1.1-prd.md) (`login` deixa de ser editável).
+
 ## Requirements Description
 
 ### Background
