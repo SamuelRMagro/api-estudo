@@ -3,7 +3,10 @@ package com.example.demo.mappers;
 import com.example.demo.dto.professor.ProfessorIdResponseDTO;
 import com.example.demo.dto.professor.ProfessorCreateDTO;
 import com.example.demo.dto.professor.ProfessorResponseDTO;
+import com.example.demo.dto.professor.ProfessorUpdateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
+import com.example.demo.dto.usuario.UsuarioCreateDTO;
+import com.example.demo.dto.usuario.UsuarioUpdateDTO;
 import com.example.demo.model.Professor;
 import com.example.demo.model.Usuario;
 import jakarta.validation.Valid;
@@ -27,7 +30,13 @@ public interface ProfessorMapper {
     @Mapping(target = "titulacoes", source = "list")
     ProfessorIdResponseDTO fromEntityToTitulacoes(Professor entity, List<ProfessorIdTitulacoesResponseDTO> list);
 
-    @Mapping(target = "usuario", source = "createDTO.usuario")
+    @Mapping(target = "usuario.nome", source = "createDTO.nome")
+    @Mapping(target = "usuario.idade", source = "createDTO.idade")
+    @Mapping(target = "usuario.login", source = "createDTO.login")
+    @Mapping(target = "usuario.email", source = "createDTO.email")
+    @Mapping(target = "usuario.cpf", source = "createDTO.cpf")
+    @Mapping(target = "usuario.senha", source = "createDTO.senha")
+    @Mapping(target = "usuario.isAtivo", source = "createDTO.isAtivo")
     Professor fromCreateDtoToEntity(@Valid ProfessorCreateDTO createDTO);
 
     @Mapping(target = "usuario.id", source = "entity.usuario.id")
@@ -43,4 +52,8 @@ public interface ProfessorMapper {
     default String cpfMascarado(Usuario entity) {
         return Usuario.cpfMascarado(entity.getCpf());
     }
+
+    UsuarioCreateDTO fromProfCreateToUserCreate(ProfessorCreateDTO profCreateDTO);
+
+    UsuarioUpdateDTO fromProfUpdateToUserUpdate(ProfessorUpdateDTO profUpdateDTO);
 }
