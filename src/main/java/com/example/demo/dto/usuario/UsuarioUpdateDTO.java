@@ -13,7 +13,7 @@ public record UsuarioUpdateDTO(
 
         @Schema(description = "Idade do usuario")
         @NotNull(message = "O campo idade não pode ser nulo.")
-        @Min(value = 5, message = "A idade minima é de {value} anos.")
+        @Min(value = 15, message = "A idade minima é de {value} anos.")
         @Max(value = 130, message = "A idade máxima é de {value} anos.")
         Integer idade,
 

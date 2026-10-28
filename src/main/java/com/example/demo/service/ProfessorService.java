@@ -5,7 +5,9 @@ import com.example.demo.dto.professorTitulacao.ProfessorIdTitulacoesResponseDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoCreateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoDatasUpdateDTO;
 import com.example.demo.dto.professorTitulacao.ProfessorTitulacaoResponseDTO;
+import com.example.demo.dto.usuario.UsuarioCreateDTO;
 import com.example.demo.dto.usuario.UsuarioResponseDTO;
+import com.example.demo.dto.usuario.UsuarioUpdateDTO;
 import com.example.demo.exceptions.custom.DadosInconsistentesCustomException;
 import com.example.demo.exceptions.custom.RegistroNaoEncontradoCustomException;
 import com.example.demo.exceptions.custom.VinculoJaExistenteCustomException;
@@ -74,7 +76,9 @@ public class ProfessorService {
     @Transactional
     public ProfessorResponseDTO cadastrarProfessor(@Valid ProfessorCreateDTO createDTO) {
 
-        UsuarioResponseDTO usuarioResponseDTO = usuarioService.cadastrarUsuario(createDTO.usuario());
+        UsuarioCreateDTO userCreateDTO = professorMapper.fromProfCreateToUserCreate(createDTO);
+
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.cadastrarUsuario(userCreateDTO);
         Usuario usuarioSaved = usuarioService.buscarPorId(usuarioResponseDTO.id());
 
         Professor professor = professorMapper.fromCreateDtoToEntity(createDTO);
@@ -88,7 +92,9 @@ public class ProfessorService {
     public ProfessorResponseDTO atualizarProfessor(@Valid ProfessorUpdateDTO updateDTO, Long id) {
         Professor professor = buscarUsuarioAtivoOuFalhar(id);
 
-        UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(updateDTO.usuario(), professor.getUsuario().getId());
+        UsuarioUpdateDTO userUpdateDTO = professorMapper.fromProfUpdateToUserUpdate(updateDTO);
+
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(userUpdateDTO, professor.getUsuario().getId());
         professor.setDataAdmissao(updateDTO.dataAdmissao());
 
         professor.setUsuario(usuarioService.buscarPorId(professor.getUsuario().getId()));
