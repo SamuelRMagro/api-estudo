@@ -1,5 +1,6 @@
 
 
+- ISSUE-54: Idade aluno calculada no nascimento
 - ISSUE-53: Exclusao logica de aluno
 - ISSUE-52: Unifica regras cadastro professor, usuario, aluno
 - ISSUE-51: Ajuste ordenação vinculos an busca de professor por id
