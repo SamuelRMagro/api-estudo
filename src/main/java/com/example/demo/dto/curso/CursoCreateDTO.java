@@ -1,14 +1,12 @@
 package com.example.demo.dto.curso;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record CursoCreateDTO(
+
         @Schema(description = "Nome do curso")
-        @NotNull(message = "O campo nome não pode ser nulo.")
+        @NotBlank(message = "O campo nome não pode ser nulo.")
         @Size(min = 5, max = 255, message = "O campo nome deve ter entre {min} e {max} caracteres.")
         String nome,
 
