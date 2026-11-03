@@ -50,7 +50,7 @@ public class CursoSpecification {
 
             LocalDateTime fimDateTime = fim != null ? fim.plusDays(1).atStartOfDay() : null;
 
-            return criteriaBuilder.lessThanOrEqualTo(root.get("dataCriacao"), fimDateTime);
+            return criteriaBuilder.lessThan(root.get("dataCriacao"), fimDateTime);
         };
     }
 }
