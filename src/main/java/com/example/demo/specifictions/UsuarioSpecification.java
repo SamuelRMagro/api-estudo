@@ -39,7 +39,7 @@ public class UsuarioSpecification {
 
             LocalDateTime fimDateTime = fim != null ? fim.plusDays(1).atStartOfDay() : null;
 
-            return criteriaBuilder.lessThanOrEqualTo(root.get("dataCadastro"), fimDateTime);
+            return criteriaBuilder.lessThan(root.get("dataCadastro"), fimDateTime);
         };
     }
 }
