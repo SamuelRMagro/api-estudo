@@ -1,10 +1,12 @@
 package com.example.demo.dto.curso;
 
 import com.example.demo.customValidations.anotacoesCustomizadas.DataDentroIntervalo;
+import com.example.demo.customValidations.anotacoesCustomizadas.DataPosterior;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
+@DataPosterior(campoInicio = "dataCadastroInicio", campoFim = "dataCadastroFim")
 public record CursoFilterRequest(
 
         @Schema(description = "Nome do curso (aceita parcial)", defaultValue = "Java", example = "Spring")
