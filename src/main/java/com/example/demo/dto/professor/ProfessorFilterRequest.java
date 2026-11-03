@@ -1,10 +1,12 @@
 package com.example.demo.dto.professor;
 
 import com.example.demo.customValidations.anotacoesCustomizadas.DataDentroIntervalo;
+import com.example.demo.customValidations.anotacoesCustomizadas.DataPosterior;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
+@DataPosterior(campoInicio = "dataAdmissaoInicio", campoFim = "dataAdmissaoFim")
 public record ProfessorFilterRequest(
 
         @Schema(description = "Nome do professor (aceita parcial)", defaultValue = "Ana", example = "Carla")
