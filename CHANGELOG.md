@@ -1,5 +1,6 @@
 
 
+- ISSUE-58: Corrige filtros listagem professores
 - ISSUE-57: Corrige filtros listagem cursos
 - ISSUE-56: Corrige filtros listagem usuarios
 - ISSUE-55: Padronizacao tamanho pagina
