@@ -1,5 +1,6 @@
 
 
+- ISSUE-56: Corrige filtros listagem usuarios
 - ISSUE-55: Padronizacao tamanho pagina
 - ISSUE-54: Idade aluno calculada no nascimento
 - ISSUE-53: Exclusao logica de aluno
