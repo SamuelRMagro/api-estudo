@@ -1,5 +1,6 @@
 
 
+- ISSUE-60: Ajusta logica de vinculo professor_titulacao
 - ISSUE-59: Logica de vinculo professor e titulacao e erros
 - ISSUE-58: Corrige filtros listagem professores
 - ISSUE-57: Corrige filtros listagem cursos
