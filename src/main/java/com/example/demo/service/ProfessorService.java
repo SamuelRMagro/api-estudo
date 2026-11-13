@@ -154,7 +154,13 @@ public class ProfessorService {
             throw new RegistroNaoEncontradoCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
         }
 
-        verificarVinculosParaDatas(datasUpdateDTO.vincDataInicio(), id, titulacao.getId());
+        if (vinculo.getIsAtivo()) {
+            BigInteger vinculos = professorTitulacaoRepository.verificarOutrosVinculosParaDatas(datasUpdateDTO.vincDataInicio(), id, titulacao.getId(), vinculoId);
+
+            if (vinculos.intValue() > 0) {
+                throw new VinculoJaExistenteCustomException();
+            }
+        }
 
         vinculo.setDataInicio(datasUpdateDTO.vincDataInicio());
         vinculo.setDataTermino(datasUpdateDTO.vincDataTermino());
@@ -162,15 +168,6 @@ public class ProfessorService {
 
         ProfessorTitulacao vinculoAtualizado = professorTitulacaoRepository.save(vinculo);
         return professorTitulacaoMapper.fromEntityToDTO(vinculoAtualizado);
-    }
-
-    private void verificarVinculosParaDatas(LocalDate dataInicio, Long professorId, Long titulacaoId) {
-
-        BigInteger vinculos = professorTitulacaoRepository.quantVinculos(dataInicio, professorId, titulacaoId);
-
-        if (vinculos.intValue() > 1) {
-            throw new VinculoJaExistenteCustomException();
-        }
     }
 
     private Professor buscaProfessor(Long id) {
@@ -189,7 +186,7 @@ public class ProfessorService {
         Professor professor = buscaProfessor(id);
         ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
 
-        if (!(vinculo.getProfessor().getId() == id)) {
+        if (!(vinculo.getProfessor().getId().equals(id))) {
             throw new RegistroNaoEncontradoCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
         }
 

@@ -14,10 +14,18 @@ public interface ProfessorTitulacaoRepository extends JpaRepository<ProfessorTit
 
     @Query(value = """
         SELECT COUNT(*)
-        FROM tb_titulacoes t
-        JOIN tb_professor_titulacoes pt ON t.id = :titulacaoId
-        WHERE pt.professor_id = :professorId AND pt.data_inicio = :dataInicio AND pt.vinculo = true
+        FROM tb_professor_titulacoes pt
+        WHERE pt.professor_id = :professorId AND pt.data_inicio = :dataInicio AND pt.vinculo = true AND pt.titulacao_id = :titulacaoId
     """, nativeQuery = true)
     BigInteger quantVinculos(@Param("dataInicio") LocalDate dataInicio, @Param("professorId") Long professorId,
                              @Param("titulacaoId") Long titulacaoId);
+
+    @Query(value = """
+        SELECT COUNT(*)
+        FROM tb_professor_titulacoes pt
+        WHERE pt.professor_id = :professorId AND pt.data_inicio = :dataInicio
+        AND pt.vinculo = true AND pt.titulacao_id = :titulacaoId AND pt.id <> :idDoVinculoEditado
+    """, nativeQuery = true)
+    BigInteger verificarOutrosVinculosParaDatas(@Param("dataInicio") LocalDate dataInicio, @Param("professorId") Long professorId,
+                             @Param("titulacaoId") Long titulacaoId, @Param("idDoVinculoEditado") Long idDoVinculoEditado);
 }
