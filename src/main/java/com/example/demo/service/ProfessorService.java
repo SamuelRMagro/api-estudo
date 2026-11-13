@@ -121,9 +121,12 @@ public class ProfessorService {
         Titulacao titulacao = buscarTitulacao(createDTO.titulacaoId());
         verificarVinculosProfTitu(createDTO.dataInicio(), id, titulacao.getId());
 
-        ProfessorTitulacao vinculoSalvo = professorTitulacaoRepository.save(new ProfessorTitulacao(professor, titulacao, createDTO.dataInicio(),
-                createDTO.dataTermino()));
-        return professorTitulacaoMapper.fromEntityToDTO(vinculoSalvo);
+        if (professor.getUsuario().getIsAtivo() && titulacao.getIsAtivo()) {
+            ProfessorTitulacao vinculoSalvo = professorTitulacaoRepository.save(new ProfessorTitulacao(professor, titulacao, createDTO.dataInicio(),
+                    createDTO.dataTermino()));
+            return professorTitulacaoMapper.fromEntityToDTO(vinculoSalvo);
+        }
+        throw new DadosInconsistentesCustomException("Há registro(s) inativo(s) na requisição.");
     }
 
     private Titulacao buscarTitulacao(Long id) {
@@ -148,7 +151,7 @@ public class ProfessorService {
         Titulacao titulacao = buscarTitulacao(vinculo.getTitulacao().getId());
 
         if (!(vinculo.getProfessor().getId().equals(id))) {
-            throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
+            throw new RegistroNaoEncontradoCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
         }
 
         verificarVinculosParaDatas(datasUpdateDTO.vincDataInicio(), id, titulacao.getId());
@@ -187,7 +190,7 @@ public class ProfessorService {
         ProfessorTitulacao vinculo = buscaVinculo(vinculoId);
 
         if (!(vinculo.getProfessor().getId() == id)) {
-            throw new DadosInconsistentesCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
+            throw new RegistroNaoEncontradoCustomException(String.format("O professor de id: %d não tem o vinculo de id: %d", id, vinculo.getId()));
         }
 
         if (vinculo.getIsAtivo()){
