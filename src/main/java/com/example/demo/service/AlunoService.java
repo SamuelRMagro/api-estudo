@@ -13,6 +13,7 @@ import com.example.demo.model.Aluno;
 import com.example.demo.model.Usuario;
 import com.example.demo.repository.AlunoRepository;
 import com.example.demo.specifictions.AlunoSpecification;
+import com.example.demo.utils.IdadeUtil;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,20 +21,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 @Service
 public class AlunoService {
 
     private final AlunoRepository alunoRepository;
-    private final AlunoMapper mapper;
     private final UsuarioService usuarioService;
     private final AlunoMapper alunoMapper;
 
-    public AlunoService(AlunoRepository alunoRepository, AlunoMapper mapper, UsuarioService usuarioService, AlunoMapper alunoMapper) {
+    public AlunoService(AlunoRepository alunoRepository, UsuarioService usuarioService, AlunoMapper alunoMapper) {
         this.alunoRepository = alunoRepository;
-        this.mapper = mapper;
         this.usuarioService = usuarioService;
         this.alunoMapper = alunoMapper;
     }
@@ -46,13 +42,13 @@ public class AlunoService {
                 .and(AlunoSpecification.isAtivo(request.isAtivo()));
         Page<Aluno> alunoPage = alunoRepository.findAll(spec, pageable);
 
-        return alunoPage.map(mapper::fromEntityToDTO);
+        return alunoPage.map(alunoMapper::fromEntityToDTO);
     }
 
     public AlunoResponseDTO buscarOuFalhar(Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado", id)));
-        return mapper.fromEntityToDTO(aluno);
+        return alunoMapper.fromEntityToDTO(aluno);
     }
 
     @Transactional
@@ -64,16 +60,10 @@ public class AlunoService {
 
         Aluno aluno = alunoMapper.fromCreateDtoToEntity(createDTO);
         aluno.setUsuario(usuarioSaved);
-        aluno.getUsuario().setIdade(calculaIdade(createDTO.dataNascimento()));
+        aluno.getUsuario().setIdade(IdadeUtil.calculaIdade(createDTO.dataNascimento()));
         aluno.setTelefone(createDTO.telefone().isBlank() ? null : createDTO.telefone().replaceAll("\\D", ""));
 
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
-    }
-
-    private Integer calculaIdade(LocalDate nascimento) {
-        LocalDate hoje = LocalDate.now();
-
-        return Period.between(nascimento, hoje).getYears();
     }
 
     @Transactional
@@ -85,7 +75,7 @@ public class AlunoService {
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(userUpdateDTO, aluno.getUsuario().getId());
 
         aluno.setDataNascimento(updateDTO.dataNascimento());
-        aluno.getUsuario().setIdade(calculaIdade(updateDTO.dataNascimento()));
+        aluno.getUsuario().setIdade(IdadeUtil.calculaIdade(updateDTO.dataNascimento()));
         aluno.setTelefone(updateDTO.telefone().isBlank() ? null : updateDTO.telefone().replaceAll("\\D", ""));
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
     }
