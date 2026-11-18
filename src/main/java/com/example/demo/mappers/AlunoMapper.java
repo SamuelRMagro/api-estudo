@@ -7,18 +7,19 @@ import com.example.demo.dto.usuario.UsuarioCreateDTO;
 import com.example.demo.dto.usuario.UsuarioUpdateDTO;
 import com.example.demo.model.Aluno;
 import com.example.demo.model.Usuario;
+import com.example.demo.utils.IdadeUtil;
 import jakarta.validation.Valid;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 @Mapper(componentModel = "spring")
 public interface AlunoMapper {
 
     @Mapping(target = "usuario", source = "entity.usuario")
     @Mapping(target = "usuario.cpf", expression = "java(cpfMascarado(usuario))")
+    @Mapping(target = "usuario.idade", expression = "java(calculaIdade(usuario.getAluno().getDataNascimento()))")
     AlunoResponseDTO fromEntityToDTO(Aluno entity);
 
     default String cpfMascarado(Usuario usuario) {
@@ -41,8 +42,6 @@ public interface AlunoMapper {
     UsuarioUpdateDTO fromAlunoUpdateToUserUpdate(AlunoUpdateDTO alunoUpdateDTO);
 
     default Integer calculaIdade(LocalDate dataNascimento) {
-        LocalDate hoje = LocalDate.now();
-
-        return Period.between(dataNascimento, hoje).getYears();
+        return IdadeUtil.calculaIdade(dataNascimento);
     }
 }
