@@ -1,5 +1,6 @@
 
 
+- ISSUE-61: Ajusta logica de calculo de idade do aluno
 - ISSUE-60: Ajusta logica de vinculo professor_titulacao
 - ISSUE-59: Logica de vinculo professor e titulacao e erros
 - ISSUE-58: Corrige filtros listagem professores
