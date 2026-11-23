@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, JpaSpecificationExecutor<Titulacao> {
@@ -21,7 +20,7 @@ public interface TitulacaoRepository extends JpaRepository<Titulacao, Long>, Jpa
         FROM tb_titulacoes t
         JOIN tb_professor_titulacoes pt ON pt.titulacao_id = t.id
         WHERE pt.professor_id = :professorId
-        ORDER BY data_inicio DESC 
+        ORDER BY pt.data_inicio DESC, pt.titulacao_id DESC
 """, nativeQuery = true)
     List<ProfessorIdTitulacoesResponseDTO> buscaTitulacoesProfessorId(@Param("professorId") Long professorId);
 }
