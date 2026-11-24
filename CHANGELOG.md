@@ -1,5 +1,6 @@
 
 
+- ISSUE-64: Correção atualizacao de aluno inativo
 - ISSUE-63: Ajusta cadastro aluno campo telefone
 - ISSUE-62: Ajusta ordenação de vinculos professor e titulacao
 - ISSUE-61: Ajusta logica de calculo de idade do aluno

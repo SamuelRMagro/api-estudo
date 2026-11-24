@@ -74,7 +74,7 @@ public class AlunoService {
         UsuarioUpdateDTO userUpdateDTO = alunoMapper.fromAlunoUpdateToUserUpdate(updateDTO);
         Aluno aluno = buscarUsuario(id);
 
-        UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizar(userUpdateDTO, aluno.getUsuario().getId());
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizarAluno(userUpdateDTO, aluno.getUsuario().getId());
 
         aluno.setDataNascimento(updateDTO.dataNascimento());
         aluno.getUsuario().setIdade(IdadeUtil.calculaIdade(updateDTO.dataNascimento()));
