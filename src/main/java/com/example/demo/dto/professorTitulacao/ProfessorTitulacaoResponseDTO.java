@@ -1,14 +1,18 @@
 package com.example.demo.dto.professorTitulacao;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record ProfessorTitulacaoResponseDTO(
         Long id,
-        LocalDate dataInicio,
-        LocalDate dataTermino,
         Long professorId,
         Long titulacaoId,
-        LocalDate dataCriacao,
-        Boolean isAtivo
+        String nome,
+        String area,
+        LocalDate dataInicio,
+        LocalDate dataTermino,
+        Boolean isAtivo,
+        LocalDateTime dataCriacao,
+        LocalDateTime dataAtualizacao
 ) {
 }
