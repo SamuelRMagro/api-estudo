@@ -10,5 +10,7 @@ public interface ProfessorTitulacaoMapper {
 
     @Mapping(target = "professorId", source = "entity.professor.id")
     @Mapping(target = "titulacaoId", source = "entity.titulacao.id")
+    @Mapping(target = "nome", source = "entity.titulacao.nome")
+    @Mapping(target = "area", source = "entity.titulacao.area")
     ProfessorTitulacaoResponseDTO fromEntityToDTO(ProfessorTitulacao entity);
 }
