@@ -110,36 +110,41 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO atualizar(@Valid UsuarioUpdateDTO updateDTO, Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findByIdAndIsAtivoIsTrue(id);
+        Usuario usuario = usuarioRepository.findByIdAndIsAtivoIsTrue(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Usuário de id: %d não encontrado ou está inativo.", id)));
+        return atualizarDados(usuario, updateDTO);
+    }
 
+    public UsuarioResponseDTO atualizarAluno(UsuarioUpdateDTO updateDTO, Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Usuário de id: %d não encontrado.", id)));
+        return atualizarDados(usuario, updateDTO);
+    }
+
+    private UsuarioResponseDTO atualizarDados(Usuario usuario, UsuarioUpdateDTO dto) {
         List<ErroCampo> erros = new ArrayList<>();
 
-        if (usuario.isEmpty()){
-            throw new RegistroNaoEncontradoCustomException(String.format("Usuário de id: %d não foi encontrado ou está inativo", id));
-        }  else {
-            Usuario user = usuario.get();
-            user.setNome(updateDTO.nome());
-            user.setIdade(updateDTO.idade());
+        usuario.setNome(dto.nome());
+        usuario.setIdade(dto.idade());
 
-            if (usuarioRepository.existsByEmailAndIdNot(updateDTO.email(), id)){
-                erros.add(new ErroCampo("email", "E-mail já cadastrado."));
-            } else {
-                user.setEmail(updateDTO.email());
-            }
-            if (usuarioRepository.existsByCpfAndIdNot(limpaCpf(updateDTO.cpf()), id)){
-                erros.add(new ErroCampo("cpf", "CPF já cadastrado."));
-            } else {
-                user.setCpf(limpaCpf(updateDTO.cpf()));
-            }
-
-            if (!erros.isEmpty()){
-                throw new CadastroInvalidoCustomException(erros);
-            }
-
-            user.setDataAtualizacao(LocalDateTime.now());
-            usuarioRepository.save(user);
-
-            return mapper.fromEntityToDTO(user);
+        if (usuarioRepository.existsByEmailAndIdNot(dto.email(), usuario.getId())){
+            erros.add(new ErroCampo("email", "E-mail já cadastrado."));
+        } else {
+            usuario.setEmail(dto.email());
         }
+        if (usuarioRepository.existsByCpfAndIdNot(limpaCpf(dto.cpf()), usuario.getId())){
+            erros.add(new ErroCampo("cpf", "CPF já cadastrado."));
+        } else {
+            usuario.setCpf(limpaCpf(dto.cpf()));
+        }
+
+        if (!erros.isEmpty()){
+            throw new CadastroInvalidoCustomException(erros);
+        }
+
+        usuario.setDataAtualizacao(LocalDateTime.now());
+        usuarioRepository.save(usuario);
+
+        return mapper.fromEntityToDTO(usuario);
     }
 }
