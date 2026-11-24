@@ -11,15 +11,6 @@ public class TelefoneValidator  implements ConstraintValidator<Telefone, String>
         if (valor == null || valor.isBlank()) {
             return true;
         }
-
-        String numeros = valor.replaceAll("\\D", "");
-
-        if (numeros.length() == 10) {
-            return numeros.matches("^[1-9]{2}[2-5]\\d{7}$");
-        }
-        if (numeros.length() == 11) {
-            return numeros.matches("^[1-9]{2}9\\d{8}$");
-        }
-        return false;
+        return valor.matches("[0-9]{10,11}");
     }
 }

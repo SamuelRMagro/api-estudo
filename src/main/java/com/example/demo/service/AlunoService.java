@@ -61,7 +61,9 @@ public class AlunoService {
         Aluno aluno = alunoMapper.fromCreateDtoToEntity(createDTO);
         aluno.setUsuario(usuarioSaved);
         aluno.getUsuario().setIdade(IdadeUtil.calculaIdade(createDTO.dataNascimento()));
-        aluno.setTelefone(createDTO.telefone().isBlank() ? null : createDTO.telefone().replaceAll("\\D", ""));
+        aluno.setTelefone(validaTelefone(createDTO.telefone()));
+
+        usuarioSaved.setAluno(aluno);
 
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
     }
@@ -76,7 +78,7 @@ public class AlunoService {
 
         aluno.setDataNascimento(updateDTO.dataNascimento());
         aluno.getUsuario().setIdade(IdadeUtil.calculaIdade(updateDTO.dataNascimento()));
-        aluno.setTelefone(updateDTO.telefone().isBlank() ? null : updateDTO.telefone().replaceAll("\\D", ""));
+        aluno.setTelefone(validaTelefone(updateDTO.telefone()));
         return alunoMapper.fromEntityToDTO(alunoRepository.save(aluno));
     }
 
@@ -90,5 +92,12 @@ public class AlunoService {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new RegistroNaoEncontradoCustomException(String.format("Aluno de id: %d não encontrado!", id)));
         usuarioService.inativar(aluno.getUsuario().getId());
+    }
+
+    private String validaTelefone(String telefone) {
+        if (telefone == null || telefone.isBlank()) {
+            return null;
+        }
+        return telefone;
     }
 }
