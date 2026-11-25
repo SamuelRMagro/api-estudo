@@ -1,5 +1,5 @@
 
-
+- ISSUE-66: Ajusta limite de datas
 - ISSUE-65: Ajusta response de vinculo professor_titulacao
 - ISSUE-64: Correção atualizacao de aluno inativo
 - ISSUE-63: Ajusta cadastro aluno campo telefone
