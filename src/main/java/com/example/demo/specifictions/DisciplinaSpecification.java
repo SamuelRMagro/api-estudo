@@ -20,11 +20,19 @@ public class DisciplinaSpecification {
                 ativo == null ? null : criteriaBuilder.equal(root.get("isAtivo"), ativo);
     }
 
-    public static Specification<Disciplina> cargaHorariaAte(Integer cargaHoraria) {
+    public static Specification<Disciplina> cargaHorariaMin(Integer cargaHorariaMin) {
         return (root, query, criteriaBuilder) -> {
-            if (cargaHoraria == null) return null;
+            if (cargaHorariaMin == null) return null;
 
-            return criteriaBuilder.lessThanOrEqualTo(root.get("cargaHoraria"), cargaHoraria);
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMin);
+        };
+    }
+
+    public static Specification<Disciplina> cargaHorariaMax(Integer cargaHorariaMax) {
+        return (root, query, criteriaBuilder) -> {
+            if (cargaHorariaMax == null) return null;
+
+            return criteriaBuilder.lessThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMax);
         };
     }
 }

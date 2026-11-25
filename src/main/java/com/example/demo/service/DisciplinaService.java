@@ -31,7 +31,8 @@ public class DisciplinaService {
                 .where(DisciplinaSpecification.nomeContem(request.nome()))
                 .and(DisciplinaSpecification.ementaContem(request.ementa()))
                 .and(DisciplinaSpecification.isAtivo(request.isAtivo()))
-                .and(DisciplinaSpecification.cargaHorariaAte(request.cargaHoraria()));
+                .and(DisciplinaSpecification.cargaHorariaMin(request.cargaHorariaMin()))
+                .and(DisciplinaSpecification.cargaHorariaMax(request.cargaHorariaMax()));
 
         Page<Disciplina> disciplinaPage = disciplinaRepository.findAll(spec, pageable);
         return disciplinaPage.map(disciplinaMapper::fromEntityToDTO);
