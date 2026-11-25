@@ -1,5 +1,6 @@
 package com.example.demo.dto.professorTitulacao;
 
+import com.example.demo.customValidations.anotacoesCustomizadas.DataDentroIntervalo;
 import com.example.demo.customValidations.anotacoesCustomizadas.DataPosterior;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -13,9 +14,11 @@ public record ProfessorTitulacaoDatasUpdateDTO(
         @Schema(description = "Data de inicio da admissão do relacionamento")
         @NotNull(message = "O campo vincDataInicio não pode ser nulo.")
         @PastOrPresent(message = "A data de inicio não pode ser futura.")
+        @DataDentroIntervalo
         LocalDate vincDataInicio,
 
         @Schema(description = "Data fim da admissão do relacionamento")
+        @DataDentroIntervalo
         LocalDate vincDataTermino
 ) {
 }

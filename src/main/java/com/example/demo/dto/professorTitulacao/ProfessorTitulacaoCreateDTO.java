@@ -22,6 +22,7 @@ public record ProfessorTitulacaoCreateDTO(
         LocalDate dataInicio,
 
         @Schema(description = "Data fim da admissão do relacionamento")
+        @DataDentroIntervalo
         LocalDate dataTermino
 ) {
 }
