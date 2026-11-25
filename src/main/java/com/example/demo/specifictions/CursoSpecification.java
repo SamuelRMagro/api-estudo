@@ -13,19 +13,35 @@ public class CursoSpecification {
                 nome == null ? null : criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")), "%" + nome.toLowerCase() + "%");
     }
 
-    public static Specification<Curso> cargaHorariaAte(Integer cargaHoraria) {
+    public static Specification<Curso> cargaHorariaMin(Integer cargaHorariaMin) {
         return (root, query, criteriaBuilder) -> {
-            if (cargaHoraria == null) return null;
+            if (cargaHorariaMin == null) return null;
 
-            return criteriaBuilder.lessThanOrEqualTo(root.get("cargaHoraria"), cargaHoraria);
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMin);
         };
     }
 
-    public static Specification<Curso> duracaoSemestreAte(Integer duracaoSemestre) {
+    public static Specification<Curso> cargaHorariaMax(Integer cargaHorariaMax) {
         return (root, query, criteriaBuilder) -> {
-            if(duracaoSemestre == null) return null;
+            if (cargaHorariaMax == null) return null;
 
-            return criteriaBuilder.lessThanOrEqualTo(root.get("duracaoSemestre"), duracaoSemestre);
+            return criteriaBuilder.lessThanOrEqualTo(root.get("cargaHoraria"), cargaHorariaMax);
+        };
+    }
+
+    public static Specification<Curso> duracaoSemestreMin(Integer duracaoSemestreMin) {
+        return (root, query, criteriaBuilder) -> {
+            if(duracaoSemestreMin == null) return null;
+
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("duracaoSemestre"), duracaoSemestreMin);
+        };
+    }
+
+    public static Specification<Curso> duracaoSemestreMax(Integer duracaoSemestreMax) {
+        return (root, query, criteriaBuilder) -> {
+            if(duracaoSemestreMax == null) return null;
+
+            return criteriaBuilder.lessThanOrEqualTo(root.get("duracaoSemestre"), duracaoSemestreMax);
         };
     }
 

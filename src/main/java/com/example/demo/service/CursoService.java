@@ -31,8 +31,10 @@ public class CursoService {
     public Page<CursoResponseDTO> listagemCursos(Pageable pageable, CursoFilterRequest request) {
         Specification<Curso> spec = Specification
                 .where(CursoSpecification.nomeContem(request.nome()))
-                .and(CursoSpecification.cargaHorariaAte(request.cargaHoraria()))
-                .and(CursoSpecification.duracaoSemestreAte(request.duracaoSemestre()))
+                .and(CursoSpecification.cargaHorariaMin(request.cargaHorariaMin()))
+                .and(CursoSpecification.cargaHorariaMax(request.cargaHorariaMax()))
+                .and(CursoSpecification.duracaoSemestreMin(request.duracaoSemestreMin()))
+                .and(CursoSpecification.duracaoSemestreMax(request.duracaoSemestreMax()))
                 .and(CursoSpecification.isAtivo(request.isAtivo()))
                 .and(CursoSpecification.inicioDepoisDe(request.dataCadastroInicio()))
                 .and(CursoSpecification.inicioAntesDe(request.dataCadastroFim()));

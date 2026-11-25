@@ -2,21 +2,30 @@ package com.example.demo.dto.curso;
 
 import com.example.demo.customValidations.anotacoesCustomizadas.DataDentroIntervalo;
 import com.example.demo.customValidations.anotacoesCustomizadas.DataPosterior;
+import com.example.demo.customValidations.anotacoesCustomizadas.IntervaloNumerico;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
 
 @DataPosterior(campoInicio = "dataCadastroInicio", campoFim = "dataCadastroFim")
+@IntervaloNumerico(campoMinimo = "cargaHorariaMin", campoMaximo = "cargaHorariaMax")
+@IntervaloNumerico(campoMinimo = "duracaoSemestreMin", campoMaximo = "duracaoSemestreMax")
 public record CursoFilterRequest(
 
         @Schema(description = "Nome do curso (aceita parcial)", defaultValue = "Java", example = "Spring")
         String nome,
 
-        @Schema(description = "Carga horaria do curso", defaultValue = "240", example = "400")
-        Integer cargaHoraria,
+        @Schema(description = "Carga horaria mínima do curso", defaultValue = "240", example = "400")
+        Integer cargaHorariaMin,
 
-        @Schema(description = "Duração do curso em semestres", defaultValue = "2", example = "3")
-        Integer duracaoSemestre,
+        @Schema(description = "Carga horaria máxima do curso", defaultValue = "240", example = "400")
+        Integer cargaHorariaMax,
+
+        @Schema(description = "Duração mínima do curso em semestres", defaultValue = "2", example = "3")
+        Integer duracaoSemestreMin,
+
+        @Schema(description = "Duração máxima do curso em semestres", defaultValue = "2", example = "3")
+        Integer duracaoSemestreMax,
 
         @Schema(description = "Status do curso (V/F)", defaultValue = "true", example = "false")
         Boolean isAtivo,

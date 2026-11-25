@@ -1,4 +1,5 @@
 
+- ISSUE-67: Ajusta filtros de listagem de cursos
 - ISSUE-66: Ajusta limite de datas
 - ISSUE-65: Ajusta response de vinculo professor_titulacao
 - ISSUE-64: Correção atualizacao de aluno inativo
