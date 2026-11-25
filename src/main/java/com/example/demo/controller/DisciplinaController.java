@@ -53,7 +53,7 @@ public class DisciplinaController {
             @PageableDefault(
                     sort = "nome",
                     direction = Sort.Direction.ASC
-            ) Pageable pageable, @ParameterObject DisciplinaFilterRequest request) {
+            ) Pageable pageable, @Valid @ParameterObject DisciplinaFilterRequest request) {
         Page<DisciplinaResponseDTO> disciplinas = service.listarDisciplinas(pageable, request);
         return ResponseEntity.ok(disciplinas);
     }
